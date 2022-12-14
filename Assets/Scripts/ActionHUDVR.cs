@@ -29,11 +29,6 @@ public class ActionHUDVR : MonoBehaviour
 
     private bool Paused;
 
-
-    //private GameObject TalkHUD;
-    //[SerializeField]
-    //private GameObject HUD;
-
     public VRNPC currentNPC;
 
 
@@ -41,9 +36,8 @@ public class ActionHUDVR : MonoBehaviour
 
     public void activate(VRNPC current)
     {
-        Debug.Log("entrei");
+        Debug.Log("VAMO TIME");
         this.currentNPC = current;
-        //gameObject.SetActive(true);
         //string[] actions = currentNPC.getActions();
     }
     void Start()
@@ -90,7 +84,7 @@ public class ActionHUDVR : MonoBehaviour
 
     public void TalkPolite()
     {
-        //bota if depois
+
         currentNPC.DispatchPlayerState("is_talking_politely");
     }
 

@@ -12,8 +12,8 @@ public class VRNPC : MonoBehaviour {
     private GameObject nameHUD;
     [SerializeField]
     private GameObject humorHUD;
-    //[SerializeField]
-    //private GameObject cultureHUD;
+    [SerializeField]
+    private GameObject cultureHUD;
     [SerializeField]
     private ElementBar healthBar;
     [SerializeField]
@@ -22,7 +22,7 @@ public class VRNPC : MonoBehaviour {
     Emotion emotion;
     Culture culture;
     Personality personality;
-    Rigidbody2D enemyBody; // IS THIS CORRECT??
+    Rigidbody2D enemyBody;
     Vector3 direction;
     public Animator animComp;
     //public Weapon currentGun;
@@ -45,7 +45,8 @@ public class VRNPC : MonoBehaviour {
     private float neutralStateTimer = 0;
     private float stoppedStateTimer = 0;
 
-    //private string cultureString;
+
+    private string cultureString;
     [SerializeField]
     private string nameString;
 
@@ -58,8 +59,8 @@ public class VRNPC : MonoBehaviour {
     private TextMeshProUGUI nameText;
     [SerializeField]
     private TextMeshProUGUI humorText;
-    //[SerializeField]
-    //private TextMeshProUGUI cultureText;
+    [SerializeField]
+    private TextMeshProUGUI cultureText;
 
 
     Dictionary<string, float> cultureAttrs = new Dictionary<string, float>() {
@@ -95,9 +96,9 @@ public class VRNPC : MonoBehaviour {
 
         nameText = nameText.GetComponent<TextMeshProUGUI>();
         humorText = humorText.GetComponent<TextMeshProUGUI>();
-        //cultureText = cultureText.GetComponent<TextMeshProUGUI>();
+        cultureText = cultureText.GetComponent<TextMeshProUGUI>();
         nameText.text = nameString;
-        //cultureText.text = cultureString;
+        cultureText.text = cultureString;
     }
 
 
@@ -199,11 +200,12 @@ public class VRNPC : MonoBehaviour {
     void GenerateInitialCulture()
     {
         float[] newCulture = new float[6];
-
+        Dictionary<string, float[]> cultures = Culture.GetCulturesValueDict();
+        int rand = Random.Range(0, 5);
+        cultureString = Culture.Cultures[rand];
         for (int i = 0; i < newCulture.Length; i++)
         {
-            float rand = Random.Range(0f, 1f) * 10f;
-            newCulture[i] = Mathf.Round(rand) * 0.1f;
+            newCulture[i] = cultures[cultureString][i];
         }
         culture = new Culture(newCulture);
     }
