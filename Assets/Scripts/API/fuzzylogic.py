@@ -1,0 +1,108 @@
+import numpy as np
+import skfuzzy as fuzz
+from skfuzzy import control as ctrl
+
+# Criando as variáveis do problema = emoção
+angerxfear = ctrl.Antecedent(np.arange(-100,100,1),'angerxfear')
+disgustxtrust = ctrl.Antecedent(np.arange(-100,100,1),'disgustxtrust')
+sadnessxjoy = ctrl.Antecedent(np.arange(-100,100,1),'sadnessxjoy')
+anticipationxsurprise = ctrl.Antecedent(np.arange(-100,100,1),'anticipationxsurprise')
+# intensity = ctrl.Antecedent(np.arange(-100,100,1),'Intensity')
+primary = ctrl.Consequent(np.arange(-100,100,1),'primary')
+secundary1 = ctrl.Consequent(np.arange(-60,60,1),'secondary1')
+secundary2 = ctrl.Consequent(np.arange(-60,60,1),'secondary2')
+tertiary = ctrl.Consequent(np.arange(-100,100,1),'tertiary')
+
+# anger = ctrl.Antecedent(np.arange(-1,-0.5,0),'Anger')
+# fear = ctrl.Antecedent(np.arange(0,0.5,1),'Fear')
+# disgust = ctrl.Antecedent(np.arange(-1,-0.5,0),'Disgust')
+# trust = ctrl.Antecedent(np.arange(0,0.5,1),'Trust')
+# sadness = ctrl.Antecedent(np.arange(-1,-0.5,0),'Sadness')
+# joy = ctrl.Antecedent(np.arange(0,0.5,1),'Joy')
+# anticipation = ctrl.Antecedent(np.arange(-1,-0.5,0),'Anticipation')
+# surprise = ctrl.Antecedent(np.arange(0,0.5,1),'Surprise')
+
+# Criando as funções de pertinência (membership functions)
+
+#Plutchiks axes
+angerxfear['annoyance'] = fuzz.trimf(angerxfear.universe,[-50,0,0])
+angerxfear['anger'] = fuzz.trimf(angerxfear.universe,[-100,-50,0])
+angerxfear['rage'] = fuzz.trimf(angerxfear.universe,[-100,-100,-50])
+angerxfear['apprehension'] = fuzz.trimf(angerxfear.universe,[0,0,50])
+angerxfear['fear'] = fuzz.trimf(angerxfear.universe,[0,50,100])
+angerxfear['terror'] = fuzz.trimf(angerxfear.universe,[50,100,100])
+disgustxtrust['boredom'] = fuzz.trimf(disgustxtrust.universe,[-100,-100,-50])
+disgustxtrust['disgust'] = fuzz.trimf(disgustxtrust.universe,[-100,-50,0])
+disgustxtrust['loathing'] = fuzz.trimf(disgustxtrust.universe,[-50,0,0])
+disgustxtrust['acceptance'] = fuzz.trimf(disgustxtrust.universe,[0,0,50])
+disgustxtrust['trust'] = fuzz.trimf(disgustxtrust.universe,[0,50,100])
+disgustxtrust['admiration'] = fuzz.trimf(disgustxtrust.universe,[50,100,100])
+sadnessxjoy['pensiveness'] = fuzz.trimf(sadnessxjoy.universe,[-50,0,0])
+sadnessxjoy['sadness'] = fuzz.trimf(sadnessxjoy.universe,[-100,-50,0])
+sadnessxjoy['grief'] = fuzz.trimf(sadnessxjoy.universe,[-100,-100,-50])
+sadnessxjoy['serenity'] = fuzz.trimf(sadnessxjoy.universe,[0,0,50])
+sadnessxjoy['joy'] = fuzz.trimf(sadnessxjoy.universe,[0,50,100])
+sadnessxjoy['ecstasy'] = fuzz.trimf(sadnessxjoy.universe,[50,100,100])
+anticipationxsurprise['interest'] = fuzz.trimf(anticipationxsurprise.universe,[-50,0,0])
+anticipationxsurprise['anticipation'] = fuzz.trimf(anticipationxsurprise.universe,[-100,-50,0])
+anticipationxsurprise['vigilance'] = fuzz.trimf(anticipationxsurprise.universe,[-100,-100,-50])
+anticipationxsurprise['distraction'] = fuzz.trimf(anticipationxsurprise.universe,[0,0,50])
+anticipationxsurprise['surprise'] = fuzz.trimf(anticipationxsurprise.universe,[0,50,100])
+anticipationxsurprise['amazement'] = fuzz.trimf(anticipationxsurprise.universe,[50,100,100])
+
+#Combination Axes
+# primary['anticipation'] = fuzz.trimf(primary.universe,[75,100,100])
+# primary['optmisitic'] = fuzz.trimf(primary.universe,[75,87.5,100])
+# primary['joy'] = fuzz.trimf(primary.universe,[50,75,100])
+# primary['in love'] = fuzz.trimf(primary.universe,[50,62.5,75])
+# primary['trust'] = fuzz.trimf(primary.universe,[25,50,75])
+# primary['submissive'] = fuzz.trimf(primary.universe,[25,37.5,50])
+# primary['fear'] = fuzz.trimf(primary.universe,[0,25,50])
+# primary['awe'] = fuzz.trimf(primary.universe,[0,12.5,25])
+# primary['surprise'] = fuzz.trimf(primary.universe,[-25,0,25])
+# primary['disapproval'] = fuzz.trimf(sadnessxjoy.universe,[-25,-12.5,0])
+# primary['sad'] = fuzz.trimf(primary.universe,[-50,-25,0])
+# primary['remorse'] = fuzz.trimf(sadnessxjoy.universe,[-50,-37.5,-25])
+# primary['disgust'] = fuzz.trimf(primary.universe,[-75,-50,-25])
+# primary['contempt'] = fuzz.trimf(anticipationxsurprise.universe,[-75,-62.5,-50])
+# primary['angry'] = fuzz.trimf(primary.universe,[-100,-75,-50])
+# primary['aggressive'] = fuzz.trimf(anticipationxsurprise.universe,[-100,-87.5,-75])
+# primary['anticipation2'] = fuzz.trimf(primary.universe,[-100,-100,-75])
+primary['anticipation'] = fuzz.trimf(primary.universe,[87.5,100,100])
+primary['optmistic'] = fuzz.trimf(primary.universe,[75,87.5,100])
+primary['joy'] = fuzz.trimf(primary.universe,[62.5,75,87.5])
+primary['in love'] = fuzz.trimf(primary.universe,[50,62.5,75])
+primary['trust'] = fuzz.trimf(primary.universe,[37.5,50,62.5])
+primary['submissive'] = fuzz.trimf(primary.universe,[25,37.5,50])
+primary['fear'] = fuzz.trimf(primary.universe,[12.5,25,37.5])
+primary['awe'] = fuzz.trimf(primary.universe,[0,12.5,25])
+primary['surprise'] = fuzz.trimf(primary.universe,[-12.5,0,12.5])
+primary['disapproval'] = fuzz.trimf(sadnessxjoy.universe,[-25,-12.5,0])
+primary['sad'] = fuzz.trimf(primary.universe,[-37.5,-25,-12.5])
+primary['remorse'] = fuzz.trimf(sadnessxjoy.universe,[-50,-37.5,-25])
+primary['disgust'] = fuzz.trimf(primary.universe,[-62.5,-50,-37.5])
+primary['contempt'] = fuzz.trimf(anticipationxsurprise.universe,[-75,-62.5,-50])
+primary['angry'] = fuzz.trimf(primary.universe,[-87.5,-75,-62.5])
+primary['aggressive'] = fuzz.trimf(anticipationxsurprise.universe,[-100,-87.5,-75])
+primary['anticipation2'] = fuzz.trimf(primary.universe,[-100,-100,-87.5])
+
+
+
+
+
+# Intensity example
+# intensity['neg_low'] = fuzz.trimf(intensity.universe,[-50,0,0])
+# intensity['neg_medium'] = fuzz.trimf(intensity.universe,[-100,-50,0])
+# intensity['neg_high'] = fuzz.trimf(intensity.universe,[-100,-100,-50])
+# intensity['pos_low'] = fuzz.trimf(intensity.universe,[0,0,50])
+# intensity['pos_medium'] = fuzz.trimf(intensity.universe,[0,50,100])
+# intensity['pos_high'] = fuzz.trimf(intensity.universe,[50,100,100])
+
+
+
+# angerxfear.view()
+# disgustxtrust.view()
+# sadnessxjoy.view()
+# anticipationxsurprise.view()
+# intensity.view()
+# primary.view()
