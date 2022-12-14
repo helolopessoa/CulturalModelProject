@@ -41,6 +41,7 @@ public class ActionHUDVR : MonoBehaviour
 
     public void activate(VRNPC current)
     {
+        Debug.Log("entrei");
         this.currentNPC = current;
         //gameObject.SetActive(true);
         //string[] actions = currentNPC.getActions();
@@ -89,7 +90,7 @@ public class ActionHUDVR : MonoBehaviour
 
     public void TalkPolite()
     {
-
+        //bota if depois
         currentNPC.DispatchPlayerState("is_talking_politely");
     }
 
