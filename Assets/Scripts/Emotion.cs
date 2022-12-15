@@ -13,9 +13,6 @@ public class Emotion {
     // [3] AntecipationXSurprise [Range(-1f, 1f)]
     float[] currentEmotion = new float[4];
 
-    // Most Influent Emotion, based on the four axis
-    float[] influentEmotion = new float[4];
-
     // Represents the bios emotion
     float[] bios = new float[4];
 
@@ -132,8 +129,8 @@ public class Emotion {
 
         // Clamp after update
         ClampCurrentEmotion();
-        // Set the most influent emotion
-        GetFuzzyEmotion();
+        PostFuzzyEmotion();
+
 
         //Debug.Log("InfEmo: ");
         //for (int i=0; i < influentEmotion.Length; i++) {
@@ -168,15 +165,13 @@ public class Emotion {
     /// Gets the name of the mental state.
     /// </summary>
     /// <returns>The mental state name.</returns>
-    
-    //CÓDIGO IMPORTANTÍSSIMO POR CAUSA DO MENTAL STATE QUE SERÁ TRANSFERIDO PARA A LÓGICA FUZZY
-    //public string GetMentalStateName() {
-    //    Dictionary<string, string> mentalStates = AllEmotions.GetMentalState();
-    //    string name = GetFuzzyEmotion();
-    //    // THIS WILL RETURN THE MENTAL STATE DIRECTLY
-    //    //Debug.Log(name);
-    //    //return mentalStates[name];
-    //}
+
+    public string GetMentalStateName()
+    {
+        Dictionary<string, string> mentalStates = AllEmotions.GetMentalState();
+        string name = GetFuzzyEmotion();
+        return mentalStates[name];
+    }
 
     /// <summary>
     /// Gets the random emotion.
@@ -189,72 +184,6 @@ public class Emotion {
 
         return allEmotions.ElementAt(randomIndex).Value;
     }
-
-    /// <summary>
-    /// Sets the most influent emotion.
-    /// </summary>
-    //public void SetMostInfluentEmotion() {
-    //    float biggestValue = Mathf.Abs(currentEmotion[0]);
-
-    //    for (int i = 1; i < currentEmotion.Length; i++) {
-    //        float currentValue = Mathf.Abs(currentEmotion[i]);
-    //        influentEmotion[i] = 0;
-
-    //        if (currentValue > biggestValue) {
-    //            biggestValue = currentValue;
-    //        }
-    //    }
-
-    //    for (int i = 0; i < currentEmotion.Length; i++) {
-    //        float currentValue = Mathf.Abs(currentEmotion[i]);
-
-    //        if ((biggestValue - currentValue) <= 0) {
-    //            influentEmotion[i] = currentEmotion[i];
-    //        }
-    //    }
-
-    //    int count = 0;
-    //    for (int i = 0; i < influentEmotion.Length; i++) {
-    //        float value = Mathf.Abs(influentEmotion[i]);
-    //        if (value > 0) {
-    //            count += 1;
-    //        }
-    //    }
-
-    //    for (int i = 0; i < influentEmotion.Length; i++)
-    //    {
-    //        float value = Mathf.Abs(influentEmotion[i]);
-    //        float sign = Mathf.Sign(influentEmotion[i]);
-
-    //        if (count <= 1) {
-    //            if (value <= 0.1f) {
-    //                influentEmotion[i] = 0;
-    //            }
-    //            else if (value <= 0.3f) {
-    //                influentEmotion[i] = 0.2f;
-    //            }
-    //            else if (value <= 0.5f) {
-    //                influentEmotion[i] = 0.5f;
-    //            }
-    //            else {
-    //                influentEmotion[i] = 1.0f;
-    //            }
-    //        }
-    //        else if (count == 2) {
-    //            if (value <= 0.5f) {
-    //                influentEmotion[i] = 0;
-    //            }
-    //            else {
-    //                influentEmotion[i] = 0.5f;
-    //            }
-    //        }
-    //        else { 
-    //            influentEmotion[i] = 0;
-    //        }
-
-    //        influentEmotion[i] = sign * influentEmotion[i];
-    //    }
-    //}
 
     /// <summary>
     /// Clamps the current emotion.
@@ -278,5 +207,9 @@ public class Emotion {
     {
         FuzzyResponse fr = FuzzyAPI.getFuzzyEmotionalResponse();
         return fr.emotion;
+    }
+    public void PostFuzzyEmotion()
+    {
+        FuzzyAPI.postFuzzyEmotionalInput(currentEmotion);
     }
 }

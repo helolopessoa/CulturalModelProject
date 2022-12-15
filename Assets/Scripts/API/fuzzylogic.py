@@ -1,108 +1,276 @@
+# 1. Entram os valores das axes emocionais
+# 2. Se calculam as intensidades utilizando max_value(abs())
+# 3. Se intensidade é média em mais de um axe, parte para a lógica fuzzy, se não, retorna a emoção mediana
+# 4. A Lógica Fuzzy recebe como entrada TODOS os axes
+# 5. Calcula a resposta para as regras primary
+# 6. Calcula a resposta para as regras do secundary 1
+# 7. Calcula a resposta para as regras do secundary 2
+# 8. Calcula a resposta para as regras do tertiary
+# 9. Compara todas estas com max_value(abs())
+# 10. Retorna a de maior valor
+
 import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
+# def getEmotion():
+#     return "emotional damage";
 
-# Criando as variáveis do problema = emoção
+result = "";
+
+# Creating fuzzy sets for Pluthick's basic axes
 angerxfear = ctrl.Antecedent(np.arange(-100,100,1),'angerxfear')
 disgustxtrust = ctrl.Antecedent(np.arange(-100,100,1),'disgustxtrust')
 sadnessxjoy = ctrl.Antecedent(np.arange(-100,100,1),'sadnessxjoy')
 anticipationxsurprise = ctrl.Antecedent(np.arange(-100,100,1),'anticipationxsurprise')
-# intensity = ctrl.Antecedent(np.arange(-100,100,1),'Intensity')
+
+# Creating membership functions)
+
+axes = [angerxfear,disgustxtrust,sadnessxjoy,anticipationxsurprise]
+str_axes = ['angerxfear','disgustxtrust','sadnessxjoy','anticipationxsurprise']
+axes_emotions = [['annoyance','anger','rage','apprehension','fear','terror'],
+                  ['boredom','disgust','loathing','acceptance','trust','admiration'],
+                  ['pensiveness','sadness','grief','serenity','joy','ecstasy'],
+                  ['interest','anticipation','vigilance','distraction','surprise','amazement']]
+coordinates = [[-50,0,0],[-100,-50,0],[-100,-100,-50], [0,0,50], [0,50,100], [50,100,100]]
+
+#Plutchik's axes membership functions
+for i in range(len(axes)):
+    for j in range(len(axes_emotions[0])):
+        axes[i][axes_emotions[i][j]] = fuzz.trimf(axes[i].universe,coordinates[j])
+
+
+#Creating fuzzy response sets for dyads
 primary = ctrl.Consequent(np.arange(-100,100,1),'primary')
-secundary1 = ctrl.Consequent(np.arange(-60,60,1),'secondary1')
-secundary2 = ctrl.Consequent(np.arange(-60,60,1),'secondary2')
+secundary1 = ctrl.Consequent(np.arange(-50,50,1),'secundary1')
+secundary2 = ctrl.Consequent(np.arange(-50,50,1),'secundary2')
 tertiary = ctrl.Consequent(np.arange(-100,100,1),'tertiary')
 
-# anger = ctrl.Antecedent(np.arange(-1,-0.5,0),'Anger')
-# fear = ctrl.Antecedent(np.arange(0,0.5,1),'Fear')
-# disgust = ctrl.Antecedent(np.arange(-1,-0.5,0),'Disgust')
-# trust = ctrl.Antecedent(np.arange(0,0.5,1),'Trust')
-# sadness = ctrl.Antecedent(np.arange(-1,-0.5,0),'Sadness')
-# joy = ctrl.Antecedent(np.arange(0,0.5,1),'Joy')
-# anticipation = ctrl.Antecedent(np.arange(-1,-0.5,0),'Anticipation')
-# surprise = ctrl.Antecedent(np.arange(0,0.5,1),'Surprise')
+dyads = [primary,tertiary]
+s_dyads = [secundary1,secundary2]
 
-# Criando as funções de pertinência (membership functions)
 
-#Plutchiks axes
-angerxfear['annoyance'] = fuzz.trimf(angerxfear.universe,[-50,0,0])
-angerxfear['anger'] = fuzz.trimf(angerxfear.universe,[-100,-50,0])
-angerxfear['rage'] = fuzz.trimf(angerxfear.universe,[-100,-100,-50])
-angerxfear['apprehension'] = fuzz.trimf(angerxfear.universe,[0,0,50])
-angerxfear['fear'] = fuzz.trimf(angerxfear.universe,[0,50,100])
-angerxfear['terror'] = fuzz.trimf(angerxfear.universe,[50,100,100])
-disgustxtrust['boredom'] = fuzz.trimf(disgustxtrust.universe,[-100,-100,-50])
-disgustxtrust['disgust'] = fuzz.trimf(disgustxtrust.universe,[-100,-50,0])
-disgustxtrust['loathing'] = fuzz.trimf(disgustxtrust.universe,[-50,0,0])
-disgustxtrust['acceptance'] = fuzz.trimf(disgustxtrust.universe,[0,0,50])
-disgustxtrust['trust'] = fuzz.trimf(disgustxtrust.universe,[0,50,100])
-disgustxtrust['admiration'] = fuzz.trimf(disgustxtrust.universe,[50,100,100])
-sadnessxjoy['pensiveness'] = fuzz.trimf(sadnessxjoy.universe,[-50,0,0])
-sadnessxjoy['sadness'] = fuzz.trimf(sadnessxjoy.universe,[-100,-50,0])
-sadnessxjoy['grief'] = fuzz.trimf(sadnessxjoy.universe,[-100,-100,-50])
-sadnessxjoy['serenity'] = fuzz.trimf(sadnessxjoy.universe,[0,0,50])
-sadnessxjoy['joy'] = fuzz.trimf(sadnessxjoy.universe,[0,50,100])
-sadnessxjoy['ecstasy'] = fuzz.trimf(sadnessxjoy.universe,[50,100,100])
-anticipationxsurprise['interest'] = fuzz.trimf(anticipationxsurprise.universe,[-50,0,0])
-anticipationxsurprise['anticipation'] = fuzz.trimf(anticipationxsurprise.universe,[-100,-50,0])
-anticipationxsurprise['vigilance'] = fuzz.trimf(anticipationxsurprise.universe,[-100,-100,-50])
-anticipationxsurprise['distraction'] = fuzz.trimf(anticipationxsurprise.universe,[0,0,50])
-anticipationxsurprise['surprise'] = fuzz.trimf(anticipationxsurprise.universe,[0,50,100])
-anticipationxsurprise['amazement'] = fuzz.trimf(anticipationxsurprise.universe,[50,100,100])
+dyads_emotions = [['anticipation','optmistic','joy','in love','trust','submissive','fear','awe','surprise',
+                   'disapproval','sad','remorse','disgust','contempt','angry','aggressive','anticipation2'],
+                 ['sadness','sentimentality','trust','dominance','anger','outrage','surprise','delight','joy',
+                  'morbidness','disgust','shame','fear','anxiety','anticipation','pessimism','sadness2']]
 
-#Combination Axes
-# primary['anticipation'] = fuzz.trimf(primary.universe,[75,100,100])
-# primary['optmisitic'] = fuzz.trimf(primary.universe,[75,87.5,100])
-# primary['joy'] = fuzz.trimf(primary.universe,[50,75,100])
-# primary['in love'] = fuzz.trimf(primary.universe,[50,62.5,75])
-# primary['trust'] = fuzz.trimf(primary.universe,[25,50,75])
-# primary['submissive'] = fuzz.trimf(primary.universe,[25,37.5,50])
-# primary['fear'] = fuzz.trimf(primary.universe,[0,25,50])
-# primary['awe'] = fuzz.trimf(primary.universe,[0,12.5,25])
-# primary['surprise'] = fuzz.trimf(primary.universe,[-25,0,25])
-# primary['disapproval'] = fuzz.trimf(sadnessxjoy.universe,[-25,-12.5,0])
-# primary['sad'] = fuzz.trimf(primary.universe,[-50,-25,0])
-# primary['remorse'] = fuzz.trimf(sadnessxjoy.universe,[-50,-37.5,-25])
-# primary['disgust'] = fuzz.trimf(primary.universe,[-75,-50,-25])
-# primary['contempt'] = fuzz.trimf(anticipationxsurprise.universe,[-75,-62.5,-50])
-# primary['angry'] = fuzz.trimf(primary.universe,[-100,-75,-50])
-# primary['aggressive'] = fuzz.trimf(anticipationxsurprise.universe,[-100,-87.5,-75])
-# primary['anticipation2'] = fuzz.trimf(primary.universe,[-100,-100,-75])
-primary['anticipation'] = fuzz.trimf(primary.universe,[87.5,100,100])
-primary['optmistic'] = fuzz.trimf(primary.universe,[75,87.5,100])
-primary['joy'] = fuzz.trimf(primary.universe,[62.5,75,87.5])
-primary['in love'] = fuzz.trimf(primary.universe,[50,62.5,75])
-primary['trust'] = fuzz.trimf(primary.universe,[37.5,50,62.5])
-primary['submissive'] = fuzz.trimf(primary.universe,[25,37.5,50])
-primary['fear'] = fuzz.trimf(primary.universe,[12.5,25,37.5])
-primary['awe'] = fuzz.trimf(primary.universe,[0,12.5,25])
-primary['surprise'] = fuzz.trimf(primary.universe,[-12.5,0,12.5])
-primary['disapproval'] = fuzz.trimf(sadnessxjoy.universe,[-25,-12.5,0])
-primary['sad'] = fuzz.trimf(primary.universe,[-37.5,-25,-12.5])
-primary['remorse'] = fuzz.trimf(sadnessxjoy.universe,[-50,-37.5,-25])
-primary['disgust'] = fuzz.trimf(primary.universe,[-62.5,-50,-37.5])
-primary['contempt'] = fuzz.trimf(anticipationxsurprise.universe,[-75,-62.5,-50])
-primary['angry'] = fuzz.trimf(primary.universe,[-87.5,-75,-62.5])
-primary['aggressive'] = fuzz.trimf(anticipationxsurprise.universe,[-100,-87.5,-75])
-primary['anticipation2'] = fuzz.trimf(primary.universe,[-100,-100,-87.5])
+s_dyads_emotions = [['disgust','unbelief','surprise','curiosity','trust','hope','anticipation','cynism','disgust2'],
+                            ['anger','envy','sadness','despair','fear','guilt','joy','pride','anger2']]
 
 
 
+coordinates = [[87.5,100,100],[75,87.5,100],[62.5,75,87.5],[50,62.5,75],[37.5,50,62.5],[25,37.5,50],[12.5,25,37.5],
+               [0,12.5,25],[-12.5,0,12.5],[-25,-12.5,0],[-37.5,-25,-12.5],[-50,-37.5,-25],[-62.5,-50,-37.5],
+               [-75,-62.5,-50],[-87.5,-75,-62.5],[-100,-87.5,-75],[-100,-100,-87.5]]
+               
+s_coordinates = [[37.5,50,50],[25,37.5,50],[12.5,25,37.5],[0,12.5,25],[-12.5,0,12.5],
+                         [-25,-12.5,0],[-37.5,-25,-12.5],[-50,-37.5,-25],[-50,-50,-37.5]]
 
 
-# Intensity example
-# intensity['neg_low'] = fuzz.trimf(intensity.universe,[-50,0,0])
-# intensity['neg_medium'] = fuzz.trimf(intensity.universe,[-100,-50,0])
-# intensity['neg_high'] = fuzz.trimf(intensity.universe,[-100,-100,-50])
-# intensity['pos_low'] = fuzz.trimf(intensity.universe,[0,0,50])
-# intensity['pos_medium'] = fuzz.trimf(intensity.universe,[0,50,100])
-# intensity['pos_high'] = fuzz.trimf(intensity.universe,[50,100,100])
+#Dyads membership functions
+for i in range(len(dyads)):
+    for j in range(len(dyads_emotions[0])):
+        dyads[i][dyads_emotions[i][j]] = fuzz.trimf(dyads[i].universe,coordinates[j])
+
+for i in range(len(s_dyads)):
+    for j in range(len(s_dyads_emotions[0])):
+        s_dyads[i][s_dyads_emotions[i][j]] = fuzz.trimf(s_dyads[i].universe,s_coordinates[j])
+
+# Fuzzy Inference
+                            
+# primary dyads
+p_rule1 = ctrl.Rule(anticipationxsurprise['anticipation'] & sadnessxjoy['joy'], primary['optmistic'])
+p_rule2 = ctrl.Rule(sadnessxjoy['joy'] & disgustxtrust['trust'], primary['in love'])
+p_rule3 = ctrl.Rule(disgustxtrust['trust'] & angerxfear['fear'], primary['submissive'])
+p_rule4 = ctrl.Rule(angerxfear['fear'] & anticipationxsurprise['surprise'], primary['awe'])
+p_rule5 = ctrl.Rule(anticipationxsurprise['surprise'] & sadnessxjoy['sadness'], primary['disapproval'])
+p_rule6 = ctrl.Rule(sadnessxjoy['sadness'] & disgustxtrust['disgust'], primary['remorse'])
+p_rule7 = ctrl.Rule(disgustxtrust['disgust'] & angerxfear['anger'], primary['contempt'])
+p_rule8 = ctrl.Rule(angerxfear['anger'] & anticipationxsurprise['anticipation'], primary['aggressive'])
+
+# secundary 1 dyads
+s1_rule1 = ctrl.Rule(anticipationxsurprise['anticipation'] & disgustxtrust['trust'], secundary1['hope'])
+s1_rule2 = ctrl.Rule(disgustxtrust['disgust'] & anticipationxsurprise['anticipation'], secundary1['cynism'])
+s1_rule3 = ctrl.Rule(disgustxtrust['trust'] & anticipationxsurprise['surprise'], secundary1['curiosity'])
+s1_rule4 = ctrl.Rule(anticipationxsurprise['surprise'] & disgustxtrust['disgust'], secundary1['unbelief'])
+
+# secundary 2 dyads
+s2_rule1 = ctrl.Rule(sadnessxjoy['sadness'] & angerxfear['anger'], secundary2['envy'])
+s2_rule2 = ctrl.Rule(angerxfear['fear'] & sadnessxjoy['sadness'], secundary2['despair'])
+s2_rule3 = ctrl.Rule(sadnessxjoy['joy'] & angerxfear['fear'], secundary2['guilt'])
+s2_rule4 = ctrl.Rule(angerxfear['anger'] & sadnessxjoy['joy'], secundary2['pride'])
+
+# tertiary dyads
+t_rule1 = ctrl.Rule(anticipationxsurprise['anticipation'] & angerxfear['fear'], tertiary['anxiety'])
+t_rule2 = ctrl.Rule(sadnessxjoy['joy'] & anticipationxsurprise['surprise'], tertiary['delight'])
+t_rule3 = ctrl.Rule(disgustxtrust['trust'] & sadnessxjoy['sadness'], tertiary['sentimentality'])
+t_rule4 = ctrl.Rule(angerxfear['fear'] & disgustxtrust['disgust'], tertiary['shame'])
+t_rule5 = ctrl.Rule(anticipationxsurprise['surprise'] & angerxfear['anger'], tertiary['outrage'])
+t_rule6 = ctrl.Rule(sadnessxjoy['sadness'] & anticipationxsurprise['anticipation'], tertiary['pessimism'])
+t_rule7 = ctrl.Rule(disgustxtrust['disgust'] & sadnessxjoy['joy'], tertiary['morbidness'])
+t_rule8 = ctrl.Rule(angerxfear['anger'] & disgustxtrust['trust'], tertiary['dominance'])
 
 
+# Fuzzy Sistems and Simulations
+primary_ctrl = ctrl.ControlSystem([p_rule1,p_rule2,p_rule3,p_rule4,p_rule5,p_rule6,p_rule7,p_rule8])
+secundary1_ctrl = ctrl.ControlSystem([s1_rule1,s1_rule2,s1_rule3,s1_rule4])
+secundary2_ctrl = ctrl.ControlSystem([s2_rule1,s2_rule2,s2_rule3,s2_rule4])
+tertiary_ctrl = ctrl.ControlSystem([t_rule1,t_rule2,t_rule3,t_rule4,t_rule5,t_rule6,t_rule7,t_rule8])
 
-# angerxfear.view()
-# disgustxtrust.view()
-# sadnessxjoy.view()
-# anticipationxsurprise.view()
-# intensity.view()
-# primary.view()
+primary_simulator = ctrl.ControlSystemSimulation(primary_ctrl)
+secundary1_simulator = ctrl.ControlSystemSimulation(secundary1_ctrl)
+secundary2_simulator = ctrl.ControlSystemSimulation(secundary2_ctrl)
+tertiary_simulator = ctrl.ControlSystemSimulation(tertiary_ctrl)
+
+def postEmotion(emotion):
+    result = calculateResultEmotion(emotion);
+
+def getEmotion():
+    return result;
+
+def calculateResultEmotion(emotion):
+    for i in range(len(emotion)):
+        emotion[i] = emotion[i]*100 #adjust emotion axes values as percentages for membership functions
+    
+    response_emotion = []
+    membership_values = []
+    max_values = []
+    response_emotion.clear()
+    membership_values.clear()
+    max_values.clear()
+    for i in range(len(axes)):
+        membership_values.append([])
+        for j in range(len(axes_emotions[0])):
+            membership_values[i].append(fuzz.interp_membership(axes[i].universe, axes[i][axes_emotions[i][j]].mf, emotion[i]*100)) 
+
+    # for i in range(len(membership_values)):
+    #     response_emotion.append(membership_values[i].index(max(membership_values[i])))
+
+    # Checks which membership is dominant, if it's medium intensity, and if there's more than one
+    cont_medium = 0
+    for i in range(len(membership_values)):
+        response_emotion.append(membership_values[i].index(max(membership_values[i])))
+        max_values.append(max(membership_values[i]))
+        if(response_emotion[i] == 1 or response_emotion[i] == 4):
+            cont_medium += 1
+    if(cont_medium <= 1):
+       result = setResponseEmotion(response_emotion, max_values)
+       return result;
+    else:
+        result = calculateDyads(emotion)
+        return result;
+        #VAI PRA LÓGICA FUZZY
+
+def calculateDyads(emotion):
+    for i in range(len(emotion)):
+        primary_simulator.input[str_axes[i]] = emotion[i]
+        tertiary_simulator.input[str_axes[i]] = emotion[i]
+        if(i==0 or i==2):
+            secundary2_simulator.input[str_axes[i]] = emotion[i]
+        elif(i==1 or i==3):
+            secundary1_simulator.input[str_axes[i]] = emotion[i]
+
+
+    
+    primary_simulator.compute()
+    secundary1_simulator.compute()
+    secundary2_simulator.compute()
+    tertiary_simulator.compute()
+
+
+    outputs = [primary_simulator.output['primary'],tertiary_simulator.output['tertiary']]
+    s_outputs = [secundary1_simulator.output['secundary1'],secundary2_simulator.output['secundary2']]
+
+    response_emotion = []
+    membership_values = []
+    response_emotion.clear()
+    membership_values.clear()
+
+    mvalues_size = 0
+    for i in range(len(dyads)):
+        membership_values.append([])
+        mvalues_size += 1
+        for j in range(len(dyads_emotions[0])):
+            membership_values[i].append(fuzz.interp_membership(dyads[i].universe, dyads[i][dyads_emotions[i][j]].mf, outputs[i])) 
+
+
+    for i in range(len(s_dyads)):
+        membership_values.append([])
+        for j in range(len(s_dyads_emotions[0])):
+            membership_values[i + mvalues_size].append(fuzz.interp_membership(s_dyads[i].universe, 
+                                                                            s_dyads[i][s_dyads_emotions[i][j]].mf, s_outputs[i]))
+
+    max_memberships = []
+    max_memberships.clear()
+    for i in range(len(membership_values)):
+        max_memberships.append(max(membership_values[i]))
+        response_emotion.append(membership_values[i].index(max_memberships[i]))
+
+    result = setDyadsResponseEmotion(response_emotion, max_memberships)
+    return result;
+    # final_emotion = max(max_responses)
+    # index_emotion = max_responses.index(final_emotion)
+    #FALTA CHECAR SE É SECUNDARIO OU PRIMARIO/TERCIARIO
+
+# max_memberships = valor máximo do membership de cada plutchik axe
+# response_emotion = índice da emoção correspondente aos valores em max_memberships
+
+def setResponseEmotion(response_emotion, max_memberships):
+    final_index = 0;
+    max_index = []
+    max_index.clear()
+    max_ = max(max_memberships)
+
+    for i in range(len(max_memberships)):
+            if max_memberships[i] == max_:
+                max_index.append(i);  #index dos máximos
+
+
+    if(len(max_index) == 1):
+        result = str(axes_emotions[max_index][response_emotion[max_index]])
+        return result.capitalize()
+    else:
+        for i in range(len(max_index)):
+            if response_emotion[max_index[i]] == 4 or response_emotion[max_index[i]] == 1:
+                result = str(axes_emotions[max_index[i]][response_emotion[max_index[i]]])
+                return result.capitalize()
+            elif response_emotion[max_index[i]] == 2 or response_emotion[max_index[i]] == 5:
+                result = str(axes_emotions[max_index[i]][response_emotion[max_index[i]]])
+                return result.capitalize()
+            else:
+                final_index = max_index[i];
+
+
+    result = str(axes_emotions[final_index][response_emotion[final_index]])
+    return result.capitalize()
+
+def setDyadsResponseEmotion(response_emotion, max_memberships):
+    final_index = 0;
+    max_index = []
+    max_index.clear()
+    max_ = max(max_memberships)
+
+    for i in range(len(max_memberships)):
+            if max_memberships[i] == max_:
+                max_index.append(i);
+
+    if(len(max_index) == 1):
+        if max_index == 0 or max_index == 1:
+            result = str(dyads_emotions[max_index][response_emotion[max_index]])
+            return result.capitalize()
+    #     result = str([max_index][response_emotion[max_index]])
+    #     return result.capitalize()
+        else:
+            result = str(s_dyads_emotions[max_index][response_emotion[max_index]])
+            return result.capitalize()
+    else: #ordem de frequencia das dyads
+        for i in range(len(max_index)):
+            if max_index[i] == 0: #primary
+                result = str(dyads_emotions[max_index[i]][response_emotion[max_index[i]]])
+                return result.capitalize()
+            elif max_index[i] == 2 or max_index[i] == 3: #secundary
+                result = str(s_dyads_emotions[max_index[i]][response_emotion[max_index[i]]])
+                return result.capitalize()
+            else: #tertiary
+                result = str(dyads_emotions[max_index[i]][response_emotion[max_index[i]]])
+                return result.capitalize()
