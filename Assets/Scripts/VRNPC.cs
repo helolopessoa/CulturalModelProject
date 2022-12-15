@@ -93,7 +93,7 @@ public class VRNPC : MonoBehaviour {
         enemyBody = GetComponent<Rigidbody2D>();
 
         humorState = emotion.GetName();
-
+        Debug.Log(humorState);
         nameText = nameText.GetComponent<TextMeshProUGUI>();
         humorText = humorText.GetComponent<TextMeshProUGUI>();
         cultureText = cultureText.GetComponent<TextMeshProUGUI>();
@@ -108,11 +108,13 @@ public class VRNPC : MonoBehaviour {
         this.emotion.UpdateEmotion(dt);
 
         UpdateBehavior(dt);
+        UpdateCurrentState();
 
         cultureAttrs["trust_level"] = currentTrust;
         this.healthBar.SetValue(currentHealth);
 
         humorState = emotion.GetName();
+        Debug.Log(humorState);
         humorText.text = humorState;
 
         if (currentHealth <= 0)
@@ -127,7 +129,7 @@ public class VRNPC : MonoBehaviour {
     void UpdateTrustLevel()
     {
         Dictionary<string, int> trustInf = AllEmotions.GetTrustInfluence();
-        string mentalStateName = emotion.GetFuzzyEmotion();
+        string mentalStateName = emotion.GetMentalStateName();
         int infValue = trustInf[mentalStateName];
 
         currentTrust = currentTrust + infValue * prejudiceLevel * (1 / maxTrust);
@@ -271,7 +273,6 @@ public class VRNPC : MonoBehaviour {
         //}
 
         humorState = mentalStateName.ToLower();
-        Debug.Log(humorState);
     }
 
     /// <summary>

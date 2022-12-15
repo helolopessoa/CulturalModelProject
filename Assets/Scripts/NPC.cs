@@ -154,7 +154,7 @@ public class NPC : MonoBehaviour
     void UpdateTrustLevel()
     {
         Dictionary<string, int> trustInf = AllEmotions.GetTrustInfluence();
-        string mentalStateName = emotion.GetFuzzyEmotion();
+        string mentalStateName = emotion.GetMentalStateName();
         int infValue = trustInf[mentalStateName];
 
         currentTrust = currentTrust + infValue * prejudiceLevel * (1 / maxTrust);
@@ -309,7 +309,7 @@ public class NPC : MonoBehaviour
     void UpdateCurrentState()
     {
         Dictionary<string, int> trustInf = AllEmotions.GetTrustInfluence();
-        string mentalStateName = emotion.GetFuzzyEmotion();
+        string mentalStateName = emotion.GetMentalStateName();
 
         //if (mentalStateName != lastMentalState) {
         //    emotion.ResetCurrentEmotion();

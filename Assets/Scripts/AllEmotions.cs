@@ -104,6 +104,7 @@ public class AllEmotions {
             // Fear X Anger Axis
             { "Rage", "Anger" },
             { "Anger", "Anger" },
+            { "Anger2", "Anger" },
             { "Annoyance", "Anger" },
             { "Apprehension", "Fear" },
             { "Fear", "Fear" },
@@ -112,6 +113,7 @@ public class AllEmotions {
             // Trust X Disgust Axis
             { "Loathing", "Disgust" },
             { "Disgust", "Disgust" },
+            { "Disgust2", "Disgust" },
             { "Boredom", "Disgust" },
             { "Acceptance", "Trust" },
             { "Trust", "Trust" },
@@ -120,6 +122,7 @@ public class AllEmotions {
             // Joy X Sadness Axis
             { "Grief", "Sadness" },
             { "Sadness", "Sadness" },
+            { "Sadness2", "Sadness" },
             { "Pensiveness", "Sadness" },
             { "Serenity", "Joy" },
             { "Joy", "Joy" },
@@ -128,6 +131,7 @@ public class AllEmotions {
             // Surprise X Anticipation Axis
             { "Vigilance", "Anticipation" },
             { "Anticipation", "Anticipation" },
+            { "Anticipation2", "Anticipation" },
             { "Interest", "Anticipation" },
             { "Distraction", "Surprise" },
             { "Surprise", "Surprise" },

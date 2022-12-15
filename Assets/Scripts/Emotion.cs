@@ -147,7 +147,7 @@ public class Emotion {
     /// <returns>The current emotion name.</returns>
     public string GetName() {
         Dictionary<string, float[]> allEmotions = AllEmotions.GetDict();
-
+        currentEmotion = GetEmotion();
         return allEmotions.FirstOrDefault(x => x.Value.SequenceEqual(currentEmotion)).Key;
     }
 

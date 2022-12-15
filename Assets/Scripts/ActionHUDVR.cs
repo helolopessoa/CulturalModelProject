@@ -36,7 +36,6 @@ public class ActionHUDVR : MonoBehaviour
 
     public void activate(VRNPC current)
     {
-        Debug.Log("VAMO TIME");
         this.currentNPC = current;
         //string[] actions = currentNPC.getActions();
     }
@@ -77,6 +76,7 @@ public class ActionHUDVR : MonoBehaviour
             //UpdateRightForceButton();
 
     }
+
     public void TalkRude()
     {
         currentNPC.DispatchPlayerState("is_not_talking_politely");

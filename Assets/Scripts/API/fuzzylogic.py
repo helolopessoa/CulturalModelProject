@@ -15,7 +15,8 @@ from skfuzzy import control as ctrl
 # def getEmotion():
 #     return "emotional damage";
 
-result = "";
+global result;
+result = "Neutral";
 
 # Creating fuzzy sets for Pluthick's basic axes
 angerxfear = ctrl.Antecedent(np.arange(-100,100,1),'angerxfear')
@@ -123,6 +124,7 @@ secundary2_simulator = ctrl.ControlSystemSimulation(secundary2_ctrl)
 tertiary_simulator = ctrl.ControlSystemSimulation(tertiary_ctrl)
 
 def postEmotion(emotion):
+    global result; 
     result = calculateResultEmotion(emotion);
 
 def getEmotion():
@@ -227,7 +229,7 @@ def setResponseEmotion(response_emotion, max_memberships):
 
 
     if(len(max_index) == 1):
-        result = str(axes_emotions[max_index][response_emotion[max_index]])
+        result = str(axes_emotions[max_index[0]][response_emotion[max_index[0]]])
         return result.capitalize()
     else:
         for i in range(len(max_index)):
@@ -255,13 +257,13 @@ def setDyadsResponseEmotion(response_emotion, max_memberships):
                 max_index.append(i);
 
     if(len(max_index) == 1):
-        if max_index == 0 or max_index == 1:
-            result = str(dyads_emotions[max_index][response_emotion[max_index]])
+        if max_index[0] == 0 or max_index[0] == 1:
+            result = str(dyads_emotions[max_index[0]][response_emotion[max_index[0]]])
             return result.capitalize()
     #     result = str([max_index][response_emotion[max_index]])
     #     return result.capitalize()
         else:
-            result = str(s_dyads_emotions[max_index][response_emotion[max_index]])
+            result = str(s_dyads_emotions[max_index[0]][response_emotion[max_index[0]]])
             return result.capitalize()
     else: #ordem de frequencia das dyads
         for i in range(len(max_index)):
