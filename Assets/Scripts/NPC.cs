@@ -120,11 +120,12 @@ public class NPC : MonoBehaviour
         this.emotion.UpdateEmotion(dt);
 
         UpdateBehavior(dt);
+        UpdateCurrentState();
 
         cultureAttrs["trust_level"] = currentTrust;
         this.healthBar.SetValue(currentHealth);
 
-        humorState = emotion.GetName();
+        //humorState = emotion.GetName();
         humorText.text = humorState;
 
         if (currentHealth <= 0)
@@ -382,7 +383,7 @@ public class NPC : MonoBehaviour
         emotion.AddEmotion(newEmotion);
         //emotion.calculateEmotion();
         //// Clamp after emotion add
-        //emotion.ClampCurrentEmotion();
+        emotion.ClampCurrentEmotion();
         //// Set the most influent emotion
         //emotion.SetMostInfluentEmotion();
     }

@@ -66,7 +66,6 @@ public class ActionHUD : MonoBehaviour
         currentNPC.DispatchPlayerState("is_talking_politely");
         TalkHUD.SetActive(false);
         resumeGame();
-        //dont know what happens for now
     }
 
     public void GiveOrStealItem()

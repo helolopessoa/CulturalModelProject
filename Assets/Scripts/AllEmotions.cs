@@ -100,6 +100,7 @@ public class AllEmotions {
             // Base Emotion
             { "Neutral", "Neutral" },
 
+
             /////// EMOTIONS AND OPPOSITES
             // Fear X Anger Axis
             { "Rage", "Anger" },

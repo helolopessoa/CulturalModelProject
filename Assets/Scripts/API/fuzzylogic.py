@@ -12,8 +12,6 @@
 import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
-# def getEmotion():
-#     return "emotional damage";
 
 global result;
 result = "Neutral";
@@ -32,12 +30,12 @@ axes_emotions = [['annoyance','anger','rage','apprehension','fear','terror'],
                   ['boredom','disgust','loathing','acceptance','trust','admiration'],
                   ['pensiveness','sadness','grief','serenity','joy','ecstasy'],
                   ['interest','anticipation','vigilance','distraction','surprise','amazement']]
-coordinates = [[-50,0,0],[-100,-50,0],[-100,-100,-50], [0,0,50], [0,50,100], [50,100,100]]
+basic_coordinates = [[-50,0,0],[-100,-50,0],[-100,-100,-50], [0,0,50], [0,50,100], [50,100,100]]
 
 #Plutchik's axes membership functions
 for i in range(len(axes)):
     for j in range(len(axes_emotions[0])):
-        axes[i][axes_emotions[i][j]] = fuzz.trimf(axes[i].universe,coordinates[j])
+        axes[i][axes_emotions[i][j]] = fuzz.trimf(axes[i].universe,basic_coordinates[j])
 
 
 #Creating fuzzy response sets for dyads
@@ -143,7 +141,7 @@ def calculateResultEmotion(emotion):
     for i in range(len(axes)):
         membership_values.append([])
         for j in range(len(axes_emotions[0])):
-            membership_values[i].append(fuzz.interp_membership(axes[i].universe, axes[i][axes_emotions[i][j]].mf, emotion[i]*100)) 
+            membership_values[i].append(fuzz.interp_membership(axes[i].universe, axes[i][axes_emotions[i][j]].mf, emotion[i])) 
 
     # for i in range(len(membership_values)):
     #     response_emotion.append(membership_values[i].index(max(membership_values[i])))
@@ -260,8 +258,6 @@ def setDyadsResponseEmotion(response_emotion, max_memberships):
         if max_index[0] == 0 or max_index[0] == 1:
             result = str(dyads_emotions[max_index[0]][response_emotion[max_index[0]]])
             return result.capitalize()
-    #     result = str([max_index][response_emotion[max_index]])
-    #     return result.capitalize()
         else:
             result = str(s_dyads_emotions[max_index[0]][response_emotion[max_index[0]]])
             return result.capitalize()
