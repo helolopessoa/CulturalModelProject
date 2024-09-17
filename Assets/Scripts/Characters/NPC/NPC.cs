@@ -6,13 +6,6 @@ using TMPro;
 public class NPC : MonoBehaviour
 {
 
-    [SerializeField]
-    private ActionHUD ActionHUD;
-    [SerializeField]
-    private GameObject TalkHUD;
-    [SerializeField]
-    private GameObject GiveOrStealHUD;
-
 
 
     [SerializeField]
@@ -175,30 +168,12 @@ public class NPC : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (!ActionHUD.gameObject.activeSelf && !TalkHUD.activeSelf && !GiveOrStealHUD.activeSelf)
-        {
-            infoText.SetActive(true);
-            NPCHUD.SetActive(true);
-        }
+        NPCHUD.SetActive(true);
     }
 
     private void OnMouseExit()
     {
-        infoText.SetActive(false);
-        if (Cursor.lockState != CursorLockMode.Confined)
-        {
-            NPCHUD.SetActive(false);
-        }
-    }
-
-    private void activateInfo()
-    {
-        Cursor.lockState = CursorLockMode.Confined;
-        infoText.SetActive(false);
-        NPCHUD.SetActive(true);
-        ActionHUD.activate(this);
-        Time.timeScale = 0f;
-
+        NPCHUD.SetActive(false);
     }
 
     /// <summary>
@@ -274,10 +249,6 @@ public class NPC : MonoBehaviour
             animComp.SetTrigger("triggerNeutral");
 
         }
-        //else if (humorState == "stopped")
-        //{
-        //    animComp.SetTrigger("triggerNeutral");
-        //}
         else if (humorState == "anger")
         {
             animComp.SetTrigger("triggerAnger");

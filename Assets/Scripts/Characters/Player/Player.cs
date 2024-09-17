@@ -9,7 +9,6 @@ public class Player : MonoBehaviour {
     private ElementBar healthBar;
 
     public Animator animComp;
-    //public Weapon currentGun;
     public Rigidbody2D playerBody;
     public CharacterController controller;
     private float maxHealth = 100;
@@ -26,10 +25,9 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     void Start () {
         this.healthBar.SetMaxValue(maxHealth);
-        //playerBody = GetComponent<Rigidbody2D>();
-        //currentGun.SetShotBy("Player");
-        // width = 0.2f;
-        // height = 0.35f;
+        playerBody = GetComponent<Rigidbody2D>();
+        width = 0.2f;
+        height = 0.35f;
     }
     
     public float speed = 12f;
@@ -41,28 +39,34 @@ public class Player : MonoBehaviour {
     void Update()
     {
         this.healthBar.SetValue(currentHealth);
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        //while (Input.GetKeyDown("w") || Input.GetKeyDown("a") || Input.GetKeyDown("d") || Input.GetKeyDown("s"))
-        //{
+        // while (Input.GetKeyDown("w") || Input.GetKeyDown("a") || Input.GetKeyDown("d") || Input.GetKeyDown("s"))
+        // {
         //    animComp.SetBool("isWalking",true);
-        //}
-        Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        // }
         animComp.SetBool("isWalking", true);
-        //if (velocity.y > 0)
-        //{
-        //    animComp.SetBool("isWalking", true);
-        //}
-        //else
-        //{
-        //    animComp.SetBool("isWalking", false);
-        //}
+        if (velocity.y > 0)
+        {
+           animComp.SetBool("isWalking", true);
+        }
+        else
+        {
+           animComp.SetBool("isWalking", false);
+        }
         if (currentHealth <= 0)
         {
             playerDied();
+        }
+        if(Input.GetKeyDown('i')){
+            currentNPC.DispatchPlayerState("is_giving_item");
+
+        }
+        if(Input.GetKeyDown('f')){
+            currentNPC.DispatchPlayerState("is_stealing_item");
+
+        }
+        if(Input.GetKeyDown('r')){
+            currentNPC.DispatchPlayerState("is_giving_money");
+
         }
 
     }
@@ -85,17 +89,12 @@ public class Player : MonoBehaviour {
         {
             Bullet b = obj.GetComponent<Bullet>();
 
-            if (b.GetShotBy() == "NPC")
-            {
-                currentHealth-= 10 / maxHealth;
-                Destroy(obj);
-            }
+            currentHealth-= 10 / maxHealth;
+            Destroy(obj);
         }
     }
     public Vector2 GetCurrentPosition()
     {
-        Vector2 position = playerBody.position;
-
-        return position;
+        return playerBody.position as Vector2;
     }
 }
