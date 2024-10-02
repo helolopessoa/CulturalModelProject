@@ -9,8 +9,6 @@ public class NPC : MonoBehaviour
 
 
     [SerializeField]
-    private GameObject infoText;
-    [SerializeField]
     private GameObject NPCHUD;
     [SerializeField]
     private GameObject nameHUD;
@@ -51,7 +49,6 @@ public class NPC : MonoBehaviour
     [SerializeField]
     private string nameString;
 
-    //public static currentNPC
 
     public bool engagedInAction = false;
     float prejudiceLevel;
@@ -81,19 +78,14 @@ public class NPC : MonoBehaviour
         GenerateInitialPersonality();
         GenerateInitialCulture();
         SetRandomDirection();
-        infoText.SetActive(false);
         NPCHUD.SetActive(false);
-        ActionHUD.gameObject.SetActive(false);
         prejudiceLevel = Random.Range(0f, 1f);
         this.healthBar.SetMaxValue(maxHealth);
         this.trustBar.SetMaxValue(maxTrust);
-        this.healthBar.SetValue(maxHealth);
-        this.trustBar.SetValue(currentTrust);
 
         float time = culture.GetTime();
         movementSpeed = movementSpeed * time;
         culture.LoadCultureDict(cultureAttrs);
-        //currentGun.SetShotBy("NPC");
         npcBody = GetComponent<Rigidbody>();
 
         humorState = emotion.GetName();
@@ -110,7 +102,7 @@ public class NPC : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        this.emotion.UpdateEmotion(dt);
+        // this.emotion.UpdateEmotion(dt);
 
         UpdateBehavior(dt);
         UpdateCurrentState();
@@ -125,20 +117,8 @@ public class NPC : MonoBehaviour
         {
             Destroy(gameObject);
             NPCHUD.SetActive(false);
-            ActionHUD.gameObject.SetActive(false);
-            GiveOrStealHUD.SetActive(false);
-            TalkHUD.SetActive(false);
             Time.timeScale = 1f;
             Cursor.lockState = CursorLockMode.Locked;
-        }
-
-        if (infoText.activeSelf)
-        {
-            if (Input.GetKeyDown("i"))
-            {
-                activateInfo();
-            }
-
         }
     }
 

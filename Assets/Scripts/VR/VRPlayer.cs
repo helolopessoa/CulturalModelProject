@@ -65,15 +65,8 @@ public class VRPlayer : MonoBehaviour {
     {
         GameObject obj = collision.gameObject;
 
-        if (collision.gameObject.CompareTag("Bullet"))
-        {
-            Bullet b = obj.GetComponent<Bullet>();
-
-            if (b.GetShotBy() == "NPC")
-            {
-                currentHealth-= 10 / maxHealth;
-                Destroy(obj);
-            }
-        }
+        // currentHealth-= 1 / maxHealth;
+        // Destroy(obj);
+        // }
     }
 }

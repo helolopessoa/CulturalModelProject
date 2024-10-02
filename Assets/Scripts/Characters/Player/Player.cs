@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
     private ElementBar healthBar;
 
     public Animator animComp;
-    public Rigidbody2D playerBody;
+    // public Rigidbody2D playerBody;
     public CharacterController controller;
     private float maxHealth = 100;
     public float currentHealth = 100;
@@ -25,7 +25,7 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     void Start () {
         this.healthBar.SetMaxValue(maxHealth);
-        playerBody = GetComponent<Rigidbody2D>();
+        // playerBody = GetComponent<Rigidbody2D>();
         width = 0.2f;
         height = 0.35f;
     }
@@ -56,18 +56,18 @@ public class Player : MonoBehaviour {
         {
             playerDied();
         }
-        if(Input.GetKeyDown('i')){
-            currentNPC.DispatchPlayerState("is_giving_item");
+        // if(Input.GetKeyDown("i")){
+        //     currentNPC.DispatchPlayerState("is_giving_item");
 
-        }
-        if(Input.GetKeyDown('f')){
-            currentNPC.DispatchPlayerState("is_stealing_item");
+        // }
+        // if(Input.GetKeyDown("f")){
+        //     currentNPC.DispatchPlayerState("is_stealing_item");
 
-        }
-        if(Input.GetKeyDown('r')){
-            currentNPC.DispatchPlayerState("is_giving_money");
+        // }
+        // if(Input.GetKeyDown("r")){
+        //     currentNPC.DispatchPlayerState("is_giving_money");
 
-        }
+        // }
 
     }
 
@@ -87,14 +87,15 @@ public class Player : MonoBehaviour {
 
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            Bullet b = obj.GetComponent<Bullet>();
+            // Bullet b = obj.GetComponent<Bullet>();
 
             currentHealth-= 10 / maxHealth;
             Destroy(obj);
         }
     }
-    public Vector2 GetCurrentPosition()
-    {
-        return playerBody.position as Vector2;
-    }
+    // public Vector2 GetCurrentPosition()
+    // {
+    //     // return playerBody.position;
+    //     return;
+    // }
 }

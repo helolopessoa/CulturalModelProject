@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Player3DController : MonoBehaviour {
 
     public Vector2 movementSpeed;
-    public Weapon currentGun;
+    // public Weapon currentGun;
     public Image healthBar;
 
     [HideInInspector]
@@ -28,9 +28,8 @@ public class Player3DController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         playerBody = GetComponent<Rigidbody2D>();
-        // currentGun.SetShotBy("Player");
-        // width = 0.2f;
-        // height = 0.35f;
+        width = 0.2f;
+        height = 0.35f;
     }
 
     /// <summary>
@@ -43,17 +42,17 @@ public class Player3DController : MonoBehaviour {
 
         // UpdateMovement(dt);
 
-        float shot = Input.GetAxis("Fire3");
-        if (shot == 1.0f) {
-            currentGun.SetTrigger(true);
-        }
+        // float shot = Input.GetAxis("Fire3");
+        // if (shot == 1.0f) {
+        //     currentGun.SetTrigger(true);
+        // }
 
         Vector2 transformPos = transform.position;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 shotDirection = mousePosition - transformPos;
-        shotDirection.Normalize();
+        // shotDirection.Normalize();
 
-        currentGun.SetDirection(shotDirection.x, shotDirection.y);
+        // currentGun.SetDirection(shotDirection.x, shotDirection.y);
     }
 
     /// <summary>
@@ -61,18 +60,12 @@ public class Player3DController : MonoBehaviour {
     /// </summary>
     /// <param name="collision">Collision.</param>
     private void OnCollisionEnter2D(Collision2D collision) {
-        //GameObject obj = collision.gameObject;
+        GameObject obj = collision.gameObject;
 
-        //Debug.Log("entrei");
-
-        //if (collision.gameObject.CompareTag("Bullet")) {
-        //    Bullet b = obj.GetComponent<Bullet>();
-
-        //    if (b.GetShotBy() == "Enemy") {
-        //        healthBar.fillAmount -= 10 / maxHealth;
-        //        Destroy(obj);
-        //    }
-        //}
+        if (collision.gameObject.CompareTag("Bullet")) {
+               healthBar.fillAmount -= 10 / maxHealth;
+               Destroy(obj);
+        }
     }
 
     /// <summary>
@@ -83,12 +76,9 @@ public class Player3DController : MonoBehaviour {
         GameObject obj = collision.gameObject;
 
         if (collision.gameObject.CompareTag("Bullet")) {
-            Bullet b = obj.GetComponent<Bullet>();
 
-            if (b.GetShotBy() == "Enemy") {
                 healthBar.fillAmount -= 10 / maxHealth;
                 Destroy(obj);
-            }
         }
     }
 
