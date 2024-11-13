@@ -19,6 +19,8 @@ public class Player : MonoBehaviour {
     public float width;
     [HideInInspector]
     public float height;
+    [HideInInspector]
+    public GameObject currentNPC; 
 
     // public Image healthBar;
     
@@ -56,18 +58,23 @@ public class Player : MonoBehaviour {
         {
             playerDied();
         }
-        // if(Input.GetKeyDown("i")){
-        //     currentNPC.DispatchPlayerState("is_giving_item");
+        if(Input.GetKeyDown(KeyCode.O)){
+            currentNPC.DispatchPlayerState("is_giving_item");
 
-        // }
-        // if(Input.GetKeyDown("f")){
-        //     currentNPC.DispatchPlayerState("is_stealing_item");
+        }
+        if(Input.GetKeyDown(KeyCode.G)){
+            currentNPC.DispatchPlayerState("is_giving_money");
 
-        // }
-        // if(Input.GetKeyDown("r")){
-        //     currentNPC.DispatchPlayerState("is_giving_money");
+        }
+        if(Input.GetKeyDown(KeyCode.F)){
+            currentNPC.DispatchPlayerState("is_stealing_item");
 
-        // }
+        }
+        if(Input.GetKeyDown(KeyCode.F)){
+            currentNPC.DispatchPlayerState("is_stealing_money");
+        }
+
+
 
     }
 

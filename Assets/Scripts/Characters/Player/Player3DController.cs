@@ -47,9 +47,9 @@ public class Player3DController : MonoBehaviour {
         //     currentGun.SetTrigger(true);
         // }
 
-        Vector2 transformPos = transform.position;
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 shotDirection = mousePosition - transformPos;
+        // Vector2 transformPos = transform.position;
+        // Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // Vector2 shotDirection = mousePosition - transformPos;
         // shotDirection.Normalize();
 
         // currentGun.SetDirection(shotDirection.x, shotDirection.y);
