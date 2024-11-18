@@ -78,7 +78,6 @@ public class NPC : MonoBehaviour
         GenerateInitialPersonality();
         GenerateInitialCulture();
         SetRandomDirection();
-        NPCHUD.SetActive(false);
         prejudiceLevel = Random.Range(0f, 1f);
         this.healthBar.SetMaxValue(maxHealth);
         this.trustBar.SetMaxValue(maxTrust);
@@ -95,6 +94,8 @@ public class NPC : MonoBehaviour
         cultureText = cultureText.GetComponent<TextMeshProUGUI>();
         nameText.text = nameString;
         cultureText.text = cultureString;
+        UpdateCurrentState();
+
     }
 
 
@@ -105,7 +106,7 @@ public class NPC : MonoBehaviour
         // this.emotion.UpdateEmotion(dt);
 
         UpdateBehavior(dt);
-        UpdateCurrentState();
+        // UpdateCurrentState();
 
         cultureAttrs["trust_level"] = currentTrust;
         this.healthBar.SetValue(currentHealth);
@@ -138,20 +139,17 @@ public class NPC : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (Time.timeScale != 0f)
-        {
             this.DispatchPlayerState("is_attacking");
-            this.currentHealth -= 10;
-        }
+            this.currentHealth -= 1;
 
     }
 
-    private void OnMouseEnter()
+    public void OnMouseAimEnter()
     {
         NPCHUD.SetActive(true);
     }
 
-    private void OnMouseExit()
+    public void OnMouseAimExit()
     {
         NPCHUD.SetActive(false);
     }

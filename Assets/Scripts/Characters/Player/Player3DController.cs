@@ -32,11 +32,6 @@ public class Player3DController : MonoBehaviour {
         height = 0.35f;
     }
 
-    /// <summary>
-    /// Updates the movement.
-    /// </summary>
-    /// <param name="dt">Delta time.</param>
-    // Update is called once per frame
     void Update () {
         float dt = Time.deltaTime;
 
@@ -55,10 +50,6 @@ public class Player3DController : MonoBehaviour {
         // currentGun.SetDirection(shotDirection.x, shotDirection.y);
     }
 
-    /// <summary>
-    /// On the collision enter2d.
-    /// </summary>
-    /// <param name="collision">Collision.</param>
     private void OnCollisionEnter2D(Collision2D collision) {
         GameObject obj = collision.gameObject;
 
@@ -68,10 +59,6 @@ public class Player3DController : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// Identify collision entring.
-    /// </summary>
-    /// <param name="collision">Who entered the trigger collision.</param>
     private void OnTriggerEnter2D(Collider2D collision) {
         GameObject obj = collision.gameObject;
 
@@ -82,9 +69,6 @@ public class Player3DController : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// Draw selected object's gizmos.
-    /// </summary>
     void OnDrawGizmosSelected() {
         // Display players dimensions (width, height)
         Gizmos.color = Color.red;

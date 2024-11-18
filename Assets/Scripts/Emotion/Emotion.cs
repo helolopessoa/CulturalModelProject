@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Globalization;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,7 +13,9 @@ public class Emotion {
     // [1] DisgustXTrust [Range(-1f, 1f)]
     // [2] SadnessXJoy [Range(-1f, 1f)]
     // [3] AntecipationXSurprise [Range(-1f, 1f)]
+    
     float[] currentEmotion = new float[4];
+    float[] influentEmotion = new float[4];
 
     // Represents the bios emotion
     float[] bios = new float[4];
@@ -26,31 +30,22 @@ public class Emotion {
     // Represents the current computed time (based on DeltaTime)
     float currentTime = 0;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="T:Emotion"/> class.
-    /// </summary>
-    /// <param name="newEmotion">New emotion.</param>
+
     public Emotion(float[] newEmotion) {
         InitializeEmotion(newEmotion);
         LoadBios();
         GetFuzzyEmotion();
     }
 
-    /// <summary>
-    /// Gets the emotion.
-    /// </summary>
-    /// <returns>The emotion.</returns>
+
     public float[] GetEmotion() {
         return currentEmotion;
     }
 
-    /// <summary>
-    /// Gets the most influent emotion.
-    /// </summary>
-    /// <returns>The most influent emotion.</returns>
-    //public float[] GetMostInfluentEmotion() {
-    //    return influentEmotion;
-    //}
+
+    public float[] GetMostInfluentEmotion() {
+       return influentEmotion;
+    }
 
     /// <summary>
     /// Apply the initial emotion values to the bios.
@@ -61,20 +56,12 @@ public class Emotion {
         }
     }
 
-    /// <summary>
-    /// // Initialize the current emotion values.
-    /// </summary>
-    /// <param name="newEmotion">New emotion.</param>
     void InitializeEmotion(float[] newEmotion) {
         for (int i = 0; i < newEmotion.Length; i++) {
             currentEmotion[i] = newEmotion[i];
         }
     }
 
-    /// <summary>
-    /// Adds the emotion.
-    /// </summary>
-    /// <param name="otherEmotion">Other emotion.</param>
     public void AddEmotion(float[] otherEmotion)
     {
         for (int i = 0; i < otherEmotion.Length; i++) {
@@ -129,7 +116,7 @@ public class Emotion {
 
         // Clamp after update
         ClampCurrentEmotion();
-        PostFuzzyEmotion();
+        // PostFuzzyEmotion();
 
 
         //Debug.Log("InfEmo: ");
@@ -141,30 +128,19 @@ public class Emotion {
         //    Debug.Log(currentEmotion[i]);
         //}
     }
-    /// <summary>
-    /// Gets the current emotion name.
-    /// </summary>
-    /// <returns>The current emotion name.</returns>
+
     public string GetName() {
         Dictionary<string, float[]> allEmotions = AllEmotions.GetDict();
         currentEmotion = GetEmotion();
         return allEmotions.FirstOrDefault(x => x.Value.SequenceEqual(currentEmotion)).Key;
     }
 
-    /// <summary>
-    /// Gets the name of the most influent emotion.
-    /// </summary>
-    /// <returns>The most influent emotion name.</returns>
-    //public string GetMostInfluentName() {
-    //    Dictionary<string, float[]> allEmotions = AllEmotions.GetDict();
 
-    //    return allEmotions.FirstOrDefault(x => x.Value.SequenceEqual(influentEmotion)).Key;
-    //}
+    public string GetMostInfluentName() {
+       Dictionary<string, float[]> allEmotions = AllEmotions.GetDict();
 
-    /// <summary>
-    /// Gets the name of the mental state.
-    /// </summary>
-    /// <returns>The mental state name.</returns>
+       return allEmotions.FirstOrDefault(x => x.Value.SequenceEqual(influentEmotion)).Key;
+    }
 
     public string GetMentalStateName()
     {
@@ -173,30 +149,23 @@ public class Emotion {
         return mentalStates[name];
     }
 
-    /// <summary>
-    /// Gets the random emotion.
-    /// </summary>
-    /// <returns>The random emotion.</returns>
+
     public static float[] GetRandomEmotion() {
         Dictionary<string, float[]> allEmotions = AllEmotions.GetDict();
         int dictSize = allEmotions.Count;
-        int randomIndex = Random.Range(0, dictSize);
+        int randomIndex = UnityEngine.Random.Range(0, dictSize);
 
         return allEmotions.ElementAt(randomIndex).Value;
     }
 
-    /// <summary>
-    /// Clamps the current emotion.
-    /// </summary>
+
     public void ClampCurrentEmotion() {
         for (int i = 0; i < currentEmotion.Length; i++) {
             currentEmotion[i] = Mathf.Clamp(currentEmotion[i], -1.0f, 1.0f);
         }
     }
 
-    /// <summary>
-    /// Resets the current emotion.
-    /// </summary>
+
     public void ResetCurrentEmotion() {
         for (int i = 0; i < currentEmotion.Length; i++) {
             currentEmotion[i] = 0;
@@ -208,6 +177,7 @@ public class Emotion {
         FuzzyResponse fr = FuzzyAPI.getFuzzyEmotionalResponse();
         return fr.emotion;
     }
+
     public void PostFuzzyEmotion()
     {
         FuzzyAPI.postFuzzyEmotionalInput(currentEmotion);

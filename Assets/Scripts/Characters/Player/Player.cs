@@ -20,8 +20,9 @@ public class Player : MonoBehaviour {
     [HideInInspector]
     public float height;
     [HideInInspector]
-    public GameObject currentNPC; 
-
+    public NPC currentNPC;
+    
+    public PlayerMovement mouseLook;
     // public Image healthBar;
     
     // Use this for initialization
@@ -30,6 +31,14 @@ public class Player : MonoBehaviour {
         // playerBody = GetComponent<Rigidbody2D>();
         width = 0.2f;
         height = 0.35f;
+
+
+        // Subscribe to the OnPointedObjectChanged event
+        if (mouseLook != null)
+        {
+            mouseLook.OnPointedGameObjectChanged += HandlePointedGameObjectChanged;
+        }
+
     }
     
     public float speed = 12f;
@@ -70,18 +79,46 @@ public class Player : MonoBehaviour {
             currentNPC.DispatchPlayerState("is_stealing_item");
 
         }
-        if(Input.GetKeyDown(KeyCode.F)){
+        if(Input.GetKeyDown(KeyCode.H)){
             currentNPC.DispatchPlayerState("is_stealing_money");
         }
+        if(Input.GetKeyDown(KeyCode.P)){
+            currentNPC.DispatchPlayerState("is_talking_politely");
 
+        }
+        if(Input.GetKeyDown(KeyCode.R)){
+            currentNPC.DispatchPlayerState("is_not_talking_politely");
+        }
 
+    }
 
+    private void HandlePointedGameObjectChanged(GameObject newPointedObject)
+    {
+        if (newPointedObject != null)
+        {
+            if (newPointedObject.TryGetComponent<NPC>(out NPC npc)){
+                currentNPC = newPointedObject.GetComponent<NPC>();
+                currentNPC.OnMouseAimEnter();
+                Debug.Log("Now pointing at: " + currentNPC);
+
+            }
+            // Example: Perform interaction or update based on the pointed object
+            // InteractWithObject(newPointedObject);
+        }
+        else
+        {
+            currentNPC?.OnMouseAimExit();
+            Debug.Log("No object is currently pointed at.");
+        }
     }
 
     void playerDied()
     {
         Debug.Log("PLAYER TA MORTIN");
-        // back to main menu
+        if (mouseLook != null)
+        {
+            mouseLook.OnPointedGameObjectChanged -= HandlePointedGameObjectChanged;
+        }
     }
 
     /// <summary>
@@ -100,6 +137,15 @@ public class Player : MonoBehaviour {
             Destroy(obj);
         }
     }
+
+    // void OnDestroy()
+    // {
+    //     // Unsubscribe from the event when this script is destroyed
+    //     if (mouseLookScript != null)
+    //     {
+    //         mouseLookScript.OnPointedObjectChanged -= HandlePointedObjectChanged;
+    //     }
+    // }
     // public Vector2 GetCurrentPosition()
     // {
     //     // return playerBody.position;
