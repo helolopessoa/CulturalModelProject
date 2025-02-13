@@ -100,6 +100,8 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 5.0f;
     public float turnSpeed = 10.0f;
     public Camera mainCamera;
+    // public Animator animComp;
+
 
     private CharacterController characterController;
 
@@ -110,7 +112,6 @@ public class PlayerMovement : MonoBehaviour
 
     private float playerRotationX = 0.0f; // Horizontal rotation of the player body
     private float cameraVerticalRotation = 0.0f; // Vertical rotation of the camera
-
 
 
     void Start()
@@ -167,6 +168,8 @@ public class PlayerMovement : MonoBehaviour
             Vector3 moveDirection = transform.right * horizontal + transform.forward * vertical;
             characterController.Move(moveDirection * speed * Time.deltaTime);
         }
+        // animComp.SetBool("isWalking", true);
+
     }
 
 

@@ -1,19 +1,31 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
+
+    Dictionary<KeyCode, string> keyActions = new Dictionary<KeyCode, string>
+    {
+        { KeyCode.O, "is_giving_item" },
+        { KeyCode.G, "is_giving_money" },
+        { KeyCode.F, "is_stealing_item" },
+        { KeyCode.H, "is_stealing_money" },
+        { KeyCode.P, "is_talking_politely" },
+        { KeyCode.R, "is_not_talking_politely" }
+    };
+
+
 
     [SerializeField]
     private ElementBar healthBar;
 
-    public Animator animComp;
+    private bool isMoving;
+
     // public Rigidbody2D playerBody;
+    public Animator animComp;
     public CharacterController controller;
     private float maxHealth = 100;
     public float currentHealth = 100;
-    private bool isWalking;
 
     [HideInInspector]
     public float width;
@@ -27,11 +39,11 @@ public class Player : MonoBehaviour {
     
     // Use this for initialization
     void Start () {
-        this.healthBar.SetMaxValue(maxHealth);
+        controller = GetComponent<CharacterController>();
+        healthBar.SetMaxValue(maxHealth);
         // playerBody = GetComponent<Rigidbody2D>();
         width = 0.2f;
         height = 0.35f;
-
 
         // Subscribe to the OnPointedObjectChanged event
         if (mouseLook != null)
@@ -44,51 +56,65 @@ public class Player : MonoBehaviour {
     public float speed = 12f;
     public float gravity = -9.81f;
 
-    Vector3 velocity;
 
 
     void Update()
     {
-        this.healthBar.SetValue(currentHealth);
-        // while (Input.GetKeyDown("w") || Input.GetKeyDown("a") || Input.GetKeyDown("d") || Input.GetKeyDown("s"))
-        // {
-        //    animComp.SetBool("isWalking",true);
-        // }
-        animComp.SetBool("isWalking", true);
-        if (velocity.y > 0)
+
+        isMoving = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || 
+                        Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
+
+        healthBar.SetValue(currentHealth);
+        if (isMoving)
         {
-           animComp.SetBool("isWalking", true);
+           animComp.SetTrigger("IsWalking");
         }
-        else
+        else if(!isMoving)
         {
-           animComp.SetBool("isWalking", false);
+           animComp.SetTrigger("StoppedWalking");
         }
+
         if (currentHealth <= 0)
         {
             playerDied();
         }
-        if(Input.GetKeyDown(KeyCode.O)){
-            currentNPC.DispatchPlayerState("is_giving_item");
 
+        foreach (var action in keyActions)
+        {
+            if (Input.GetKeyDown(action.Key))
+            {
+                currentNPC.DispatchPlayerState(action.Value);
+            }
         }
-        if(Input.GetKeyDown(KeyCode.G)){
-            currentNPC.DispatchPlayerState("is_giving_money");
 
-        }
-        if(Input.GetKeyDown(KeyCode.F)){
-            currentNPC.DispatchPlayerState("is_stealing_item");
 
-        }
-        if(Input.GetKeyDown(KeyCode.H)){
-            currentNPC.DispatchPlayerState("is_stealing_money");
-        }
-        if(Input.GetKeyDown(KeyCode.P)){
-            currentNPC.DispatchPlayerState("is_talking_politely");
+        // if(Input.GetKeyDown(KeyCode.O)){
+        //     currentNPC.DispatchPlayerState("is_giving_item");
 
-        }
-        if(Input.GetKeyDown(KeyCode.R)){
-            currentNPC.DispatchPlayerState("is_not_talking_politely");
-        }
+        // }
+
+        // if(Input.GetKeyDown(KeyCode.G)){
+        //     currentNPC.DispatchPlayerState("is_giving_money");
+
+        // }
+
+        // if(Input.GetKeyDown(KeyCode.F)){
+        //     currentNPC.DispatchPlayerState("is_stealing_item");
+
+        // }
+
+        // if(Input.GetKeyDown(KeyCode.H)){
+        //     currentNPC.DispatchPlayerState("is_stealing_money");
+        // }
+
+        // if(Input.GetKeyDown(KeyCode.P)){
+        //     currentNPC.DispatchPlayerState("is_talking_politely");
+
+        // }
+
+        // if(Input.GetKeyDown(KeyCode.R)){
+        //     currentNPC.DispatchPlayerState("is_not_talking_politely");
+        // }
 
     }
 

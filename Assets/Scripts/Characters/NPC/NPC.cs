@@ -8,31 +8,25 @@ public class NPC : MonoBehaviour
 
 
 
-    [SerializeField]
-    private GameObject NPCHUD;
-    [SerializeField]
-    private GameObject nameHUD;
-    [SerializeField]
-    private GameObject humorHUD;
-    [SerializeField]
-    private GameObject cultureHUD;
-    [SerializeField]
-    private ElementBar healthBar;
-    [SerializeField]
-    private ElementBar trustBar;
+    public GameObject NPCHUD;
 
     Emotion emotion;
     Culture culture;
     Personality personality;
     Rigidbody npcBody;
     Vector3 direction;
+    float prejudiceLevel;
+
     public Animator animComp;
     public ProxemicsBehavior proxemicsBehavior;
 
     public float maxHealth = 100;
     private float maxTrust = 100;
+    [HideInInspector]
     public float currentHealth = 100;
-    private float currentTrust = 0.5f;
+    [HideInInspector]
+    public float currentTrust = 0.5f;
+    [HideInInspector]
     public Vector3 movementSpeed = new Vector3(0f, 0f, 0f);
 
     [HideInInspector]
@@ -40,25 +34,18 @@ public class NPC : MonoBehaviour
     [HideInInspector]
     public float maxWalkingTime = 5f;
 
-    private string humorState = "neutral";
-    private string lastMentalState = "neutral";
+    private string lastMentalState = "Neutral";
     private float neutralStateTimer = 0;
     private float stoppedStateTimer = 0;
 
-    private string cultureString;
-    [SerializeField]
-    private string nameString;
+    [HideInInspector]
+    public string cultureString;
+    [HideInInspector]
+    public string humorState = "neutral";
+    public string nameString;
 
 
     public bool engagedInAction = false;
-    float prejudiceLevel;
-
-    [SerializeField]
-    private TextMeshProUGUI nameText;
-    [SerializeField]
-    private TextMeshProUGUI humorText;
-    [SerializeField]
-    private TextMeshProUGUI cultureText;
 
 
     Dictionary<string, float> cultureAttrs = new Dictionary<string, float>() {
@@ -79,21 +66,15 @@ public class NPC : MonoBehaviour
         GenerateInitialCulture();
         SetRandomDirection();
         prejudiceLevel = Random.Range(0f, 1f);
-        this.healthBar.SetMaxValue(maxHealth);
-        this.trustBar.SetMaxValue(maxTrust);
+
 
         float time = culture.GetTime();
         movementSpeed = movementSpeed * time;
         culture.LoadCultureDict(cultureAttrs);
         npcBody = GetComponent<Rigidbody>();
-
         humorState = emotion.GetName();
 
-        nameText = nameText.GetComponent<TextMeshProUGUI>();
-        humorText = humorText.GetComponent<TextMeshProUGUI>();
-        cultureText = cultureText.GetComponent<TextMeshProUGUI>();
-        nameText.text = nameString;
-        cultureText.text = cultureString;
+
         UpdateCurrentState();
 
     }
@@ -101,18 +82,17 @@ public class NPC : MonoBehaviour
 
     void Update()
     {
+
         float dt = Time.deltaTime;
 
-        // this.emotion.UpdateEmotion(dt);
+        emotion.UpdateEmotion(dt);
 
         UpdateBehavior(dt);
         // UpdateCurrentState();
 
         cultureAttrs["trust_level"] = currentTrust;
-        this.healthBar.SetValue(currentHealth);
 
-        //humorState = emotion.GetName();
-        humorText.text = humorState;
+        humorState = emotion.GetName();
 
         if (currentHealth <= 0)
         {
@@ -133,20 +113,21 @@ public class NPC : MonoBehaviour
         int infValue = trustInf[mentalStateName];
 
         currentTrust = currentTrust + infValue * prejudiceLevel * (1 / maxTrust);
-        this.trustBar.SetValue(currentTrust);
 
     }
 
     private void OnMouseDown()
     {
-            this.DispatchPlayerState("is_attacking");
-            this.currentHealth -= 1;
+            DispatchPlayerState("is_attacking");
+            currentHealth -= 1;
 
     }
 
     public void OnMouseAimEnter()
     {
         NPCHUD.SetActive(true);
+        NPCHUD npcHud = NPCHUD.GetComponent<NPCHUD>();
+        npcHud.onNPCSelected(this);
     }
 
     public void OnMouseAimExit()
@@ -197,6 +178,7 @@ public class NPC : MonoBehaviour
         Dictionary<string, float[]> cultures = Culture.GetCulturesValueDict();
         int rand = Random.Range(0, 5);
         cultureString = Culture.Cultures[rand];
+        Debug.Log(cultureString);
         for (int i = 0; i < newCulture.Length; i++)
         {
             newCulture[i] = cultures[cultureString][i];
