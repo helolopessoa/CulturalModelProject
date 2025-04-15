@@ -5,3 +5,5 @@ Library/
 Logs/
 obj/
 Temp/
+*.gguf
+*.gguf.meta
