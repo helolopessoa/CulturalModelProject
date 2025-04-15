@@ -4,13 +4,14 @@ using System.Net;
 using System.IO;
 using System;
 using System.Text;
+using environments;
 
 public static class FuzzyAPI
 {
 
         public static FuzzyResponse getFuzzyEmotionalResponse()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://127.0.0.1:5000/fuzzyemotionapi");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(environments.apiFuzzyURL + "/get");
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string json = reader.ReadToEnd();
@@ -21,7 +22,7 @@ public static class FuzzyAPI
     public static void postFuzzyEmotionalInput(float[] currentEmotion)
     {
         string[] emotionKeys = { "axeAF", "axeDT", "axeSJ", "axeAS" };
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://127.0.0.1:5000/fuzzyemotionapi");
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(environments.apiFuzzyURL + "/post");
         var postData = "&" + emotionKeys[0] + "=" + Uri.EscapeDataString(currentEmotion[0].ToString());
         for (var i=1 ; i<4 ; i++)
         {

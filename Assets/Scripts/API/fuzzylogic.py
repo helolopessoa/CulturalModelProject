@@ -123,10 +123,10 @@ tertiary_simulator = ctrl.ControlSystemSimulation(tertiary_ctrl)
 
 def postEmotion(emotion):
     global result; 
-    result = calculateResultEmotion(emotion);
+    result = calculateResultEmotion(emotion)
 
 def getEmotion():
-    return result;
+    return result
 
 def calculateResultEmotion(emotion):
     for i in range(len(emotion)):
@@ -155,10 +155,10 @@ def calculateResultEmotion(emotion):
             cont_medium += 1
     if(cont_medium <= 1):
        result = setResponseEmotion(response_emotion, max_values)
-       return result;
+       return result
     else:
         result = calculateDyads(emotion)
-        return result;
+        return result
         #VAI PRA LÓGICA FUZZY
 
 def calculateDyads(emotion):
@@ -207,7 +207,7 @@ def calculateDyads(emotion):
         response_emotion.append(membership_values[i].index(max_memberships[i]))
 
     result = setDyadsResponseEmotion(response_emotion, max_memberships)
-    return result;
+    return result
     # final_emotion = max(max_responses)
     # index_emotion = max_responses.index(final_emotion)
     #FALTA CHECAR SE É SECUNDARIO OU PRIMARIO/TERCIARIO
@@ -216,7 +216,7 @@ def calculateDyads(emotion):
 # response_emotion = índice da emoção correspondente aos valores em max_memberships
 
 def setResponseEmotion(response_emotion, max_memberships):
-    final_index = 0;
+    final_index = 0
     max_index = []
     max_index.clear()
     max_ = max(max_memberships)
@@ -238,21 +238,21 @@ def setResponseEmotion(response_emotion, max_memberships):
                 result = str(axes_emotions[max_index[i]][response_emotion[max_index[i]]])
                 return result.capitalize()
             else:
-                final_index = max_index[i];
+                final_index = max_index[i]
 
 
     result = str(axes_emotions[final_index][response_emotion[final_index]])
     return result.capitalize()
 
 def setDyadsResponseEmotion(response_emotion, max_memberships):
-    final_index = 0;
+    final_index = 0
     max_index = []
     max_index.clear()
     max_ = max(max_memberships)
 
     for i in range(len(max_memberships)):
             if max_memberships[i] == max_:
-                max_index.append(i);
+                max_index.append(i)
 
     if(len(max_index) == 1):
         if max_index[0] == 0 or max_index[0] == 1:
