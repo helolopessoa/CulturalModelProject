@@ -4,14 +4,16 @@ using System.Net;
 using System.IO;
 using System;
 using System.Text;
-using environments;
 
 public static class LlamaAPI
 {
+    private static string apiURL = "http://localhost:11434";
+    private static string apiLlamaURL = apiURL + "/llamaapi";
+
 
         public static LlamaResponse getLlamaResponse()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(environments.apiLlamaURL + "/generate");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiLlamaURL + "/generate");
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string json = reader.ReadToEnd();
@@ -19,20 +21,19 @@ public static class LlamaAPI
 
       }
 
-    public static void postLlamaAction()
+    public static void postLlamaAction(string message)
     {
-        // string[] emotionKeys = { "axeAF", "axeDT", "axeSJ", "axeAS" };
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(environment.apiURL + "/llamaapi");
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiLlamaURL + "/llamaapi");
         request.Method = "POST";
 
-        var postData = "{\"prompt\": \"Write a phrase about mountains\"}";
-        // var data = Encoding.ASCII.GetBytes(postData);
-        
-        // request.ContentLength = data.Length;
+        var postData = "{\"prompt\": \"" + message +"\"}";
+        byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+
 
         using (var stream = request.GetRequestStream())
         {
-            stream.Write(postData);
+            stream.Write(byteArray, 0, byteArray.Length);
+
             stream.Flush();
         }
 
@@ -41,7 +42,7 @@ public static class LlamaAPI
         var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
         
         Debug.Log("Llama response: " + response);
-        return JsonUtility.FromJson<LlamaResponse>(response);
+        // return JsonUtility.FromJson<LlamaResponse>(response);
         
 
     }
