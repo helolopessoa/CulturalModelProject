@@ -9,6 +9,7 @@ public class NPC : MonoBehaviour
 
 
     public GameObject NPCHUD;
+    public GameObject LLMChatHUD;
 
     Emotion emotion;
     Culture culture;
@@ -18,7 +19,7 @@ public class NPC : MonoBehaviour
     float prejudiceLevel;
 
     public Animator animComp;
-    public ProxemicsBehavior proxemicsBehavior;
+    // public ProxemicsBehavior proxemicsBehavior;
 
     public float maxHealth = 100;
     private float maxTrust = 100;
@@ -85,14 +86,14 @@ public class NPC : MonoBehaviour
 
         float dt = Time.deltaTime;
 
-        emotion.UpdateEmotion(dt);
+        emotion?.UpdateEmotion(dt);
 
         UpdateBehavior(dt);
         // UpdateCurrentState();
 
         cultureAttrs["trust_level"] = currentTrust;
 
-        humorState = emotion.GetName();
+        humorState = emotion?.GetName();
 
         if (currentHealth <= 0)
         {
@@ -259,12 +260,22 @@ public class NPC : MonoBehaviour
     public void DispatchPlayerState(string playerState)
     {
         Debug.Log(playerState);
-        Dictionary<string, string[]> stateEmo = ActionEmotions.GetDict();
-        Dictionary<string, string> stateAttrs = ActionEmotions.GetCultureAttributes();
-        Dictionary<string, float[]> allEmo = AllEmotions.GetDict();
-
         if (playerState != "")
         {
+            if(playerState == "is_talking")
+            {
+                LLMChatHUD.SetActive(true);
+                // GameObject.Find("LLMChat")?.SetActive(true);
+                // LLMChatBox llmChat = GameObject.Find("LLMChat")?.GetComponent<LLMChatBox>();
+                LLMChatBox llmChat = LLMChatHUD.GetComponent<LLMChatBox>();
+                llmChat.onNPCSelected(this);
+                return;
+            }
+
+            Dictionary<string, string[]> stateEmo = ActionEmotions.GetDict();
+            Dictionary<string, string> stateAttrs = ActionEmotions.GetCultureAttributes();
+            Dictionary<string, float[]> allEmo = AllEmotions.GetDict();
+
             string[] emotionsArray = stateEmo[playerState];
             string attrName = stateAttrs[playerState];
             float rat = 1 - culture.GetRationality();

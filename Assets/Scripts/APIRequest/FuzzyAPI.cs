@@ -16,7 +16,8 @@ public static class FuzzyAPI
 
         public static FuzzyResponse getFuzzyEmotionalResponse()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiFuzzyURL + "/get");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiFuzzyURL);
+            request.Method = "GET";
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string json = reader.ReadToEnd();
@@ -27,7 +28,7 @@ public static class FuzzyAPI
     public static void postFuzzyEmotionalInput(float[] currentEmotion)
     {
         string[] emotionKeys = { "axeAF", "axeDT", "axeSJ", "axeAS" };
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiFuzzyURL + "/post");
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiFuzzyURL);
         var postData = "&" + emotionKeys[0] + "=" + Uri.EscapeDataString(currentEmotion[0].ToString());
         for (var i=1 ; i<4 ; i++)
         {

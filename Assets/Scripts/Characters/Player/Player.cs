@@ -11,21 +11,24 @@ public class Player : MonoBehaviour {
         { KeyCode.F, "is_stealing_item" },
         { KeyCode.H, "is_stealing_money" },
         { KeyCode.P, "is_talking_politely" },
-        { KeyCode.R, "is_not_talking_politely" }
+        { KeyCode.R, "is_not_talking_politely" },
+        { KeyCode.T, "is_talking" }
     };
 
 
 
     [SerializeField]
     private ElementBar healthBar;
-
+    [HideInInspector]
     private bool isMoving;
+    public bool chatboxDisabled = true;
 
     // public Rigidbody2D playerBody;
     public Animator animComp;
     public CharacterController controller;
     private float maxHealth = 100;
     public float currentHealth = 100;
+
 
     [HideInInspector]
     public float width;
@@ -61,8 +64,8 @@ public class Player : MonoBehaviour {
     void Update()
     {
 
-        isMoving = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || 
-                        Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
+        isMoving = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || 
+            Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && chatboxDisabled;
 
         healthBar.SetValue(currentHealth);
         if (isMoving)
@@ -81,40 +84,11 @@ public class Player : MonoBehaviour {
 
         foreach (var action in keyActions)
         {
-            if (Input.GetKeyDown(action.Key))
+            if (Input.GetKeyDown(action.Key) && )
             {
                 currentNPC.DispatchPlayerState(action.Value);
             }
         }
-
-
-        // if(Input.GetKeyDown(KeyCode.O)){
-        //     currentNPC.DispatchPlayerState("is_giving_item");
-
-        // }
-
-        // if(Input.GetKeyDown(KeyCode.G)){
-        //     currentNPC.DispatchPlayerState("is_giving_money");
-
-        // }
-
-        // if(Input.GetKeyDown(KeyCode.F)){
-        //     currentNPC.DispatchPlayerState("is_stealing_item");
-
-        // }
-
-        // if(Input.GetKeyDown(KeyCode.H)){
-        //     currentNPC.DispatchPlayerState("is_stealing_money");
-        // }
-
-        // if(Input.GetKeyDown(KeyCode.P)){
-        //     currentNPC.DispatchPlayerState("is_talking_politely");
-
-        // }
-
-        // if(Input.GetKeyDown(KeyCode.R)){
-        //     currentNPC.DispatchPlayerState("is_not_talking_politely");
-        // }
 
     }
 
