@@ -44,7 +44,7 @@ public class NPCHUD : MonoBehaviour {
     }
 
     public void onNPCSelected(NPC npc){
-        Debug.Log(npc.nameString);
+        // Debug.Log(npc.nameString);
         currentHealth = npc.currentHealth;
         currentTrust = npc.currentTrust;
         currentName =  npc.nameString;

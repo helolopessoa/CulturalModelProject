@@ -63,9 +63,12 @@ public class Player : MonoBehaviour {
 
     void Update()
     {
+        chatboxDisabled = currentNPC?.LLMChatHUD == null || !currentNPC.LLMChatHUD.activeInHierarchy;
 
-        isMoving = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || 
-            Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && chatboxDisabled;
+        isMoving = ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || 
+            Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && chatboxDisabled);
+
+        mouseLook.enabled = chatboxDisabled;
 
         healthBar.SetValue(currentHealth);
         if (isMoving)
@@ -84,7 +87,7 @@ public class Player : MonoBehaviour {
 
         foreach (var action in keyActions)
         {
-            if (Input.GetKeyDown(action.Key) && )
+            if (Input.GetKeyDown(action.Key) && chatboxDisabled)
             {
                 currentNPC.DispatchPlayerState(action.Value);
             }
@@ -99,7 +102,7 @@ public class Player : MonoBehaviour {
             if (newPointedObject.TryGetComponent<NPC>(out NPC npc)){
                 currentNPC = newPointedObject.GetComponent<NPC>();
                 currentNPC.OnMouseAimEnter();
-                Debug.Log("Now pointing at: " + currentNPC);
+                // Debug.Log("Now pointing at: " + currentNPC);
 
             }
             // Example: Perform interaction or update based on the pointed object
@@ -108,7 +111,7 @@ public class Player : MonoBehaviour {
         else
         {
             currentNPC?.OnMouseAimExit();
-            Debug.Log("No object is currently pointed at.");
+            // Debug.Log("No object is currently pointed at.");
         }
     }
 

@@ -9,55 +9,70 @@ public class LLMChatBox : MonoBehaviour
     public GameObject LLMChat;
     public TMP_InputField messageInput;
     public TMP_Text messageOutput;
+
+    public Transform chatContent;
     [HideInInspector]
     string response;
     [HideInInspector]
     NPC currentNPC;
 
+    void Start()
+    {
+        messageInput.onEndEdit.AddListener(onSendMessage);
+        // messageInput.gameObject.SetActive(false); 
+    }
     void Update()
     {
 
-        if (messageInput.isFocused && Input.GetKeyDown(KeyCode.Return))
-        {
-            onSendMessage();
-        }
+        // if (messageInput.isFocused && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        // {
+        //     Debug.Log("onSendMessage called from Update");
+        //     onSendMessage();
+        // }
 
-        if(!string.IsNullOrWhiteSpace(this.response))
+        if(!string.IsNullOrWhiteSpace(response))
         {
-            messageOutput.text = this.response;
+            messageOutput.text = response;
         }
         else
         {
-            messageOutput.text = " ...";
+            messageOutput.text = " Hi! I'm "  + currentNPC?.nameString + ". Nice to meet you!";
         }
     }
 
     public void onNPCSelected(NPC npc)
     {
-        this.currentNPC = npc;
+        currentNPC = npc;
         // sendButton.onClick.AddListener(onSendMessage);
         EventSystem.current.SetSelectedGameObject(messageInput.gameObject);
         messageInput.ActivateInputField();
     }
 
-    public void onSendMessage()
+    public void onSendMessage(string message)
     {
-        string message = messageInput.text;
-        if (!string.IsNullOrWhiteSpace(message))
-        {
-            PostLlamaAction(message);
-            messageInput.text = "";
-        }
-        // this.currentNPC?.DispatchPlayerState(action.Value);
-        this.GetLlamaResponse();
-        EventSystem.current.SetSelectedGameObject(messageInput.gameObject);
-        messageInput.ActivateInputField();
+        // Debug.Log(messageInput.isFocused);
+        // if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        // {
+            // string message = messageInput.text;
+            Debug.Log("onSendMessage");
+            Debug.Log(message);
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                PostLlamaAction(message);
+                messageInput.text = "";
+            }
+            // this.currentNPC?.DispatchPlayerState(action.Value);
+            GetLlamaResponse();
+            EventSystem.current.SetSelectedGameObject(messageInput.gameObject);
+            messageInput.ActivateInputField();
+        // }
+
     }    
 
     public void GetLlamaResponse()
     {
         LlamaResponse lr = LlamaAPI.getLlamaResponse();
-        this.response = lr.answer;
+        response = lr.answer;
     }
 
     public void PostLlamaAction(string message)

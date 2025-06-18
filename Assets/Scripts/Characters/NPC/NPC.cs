@@ -179,7 +179,7 @@ public class NPC : MonoBehaviour
         Dictionary<string, float[]> cultures = Culture.GetCulturesValueDict();
         int rand = Random.Range(0, 5);
         cultureString = Culture.Cultures[rand];
-        Debug.Log(cultureString);
+        // Debug.Log(cultureString);
         for (int i = 0; i < newCulture.Length; i++)
         {
             newCulture[i] = cultures[cultureString][i];
@@ -250,7 +250,7 @@ public class NPC : MonoBehaviour
         //}
 
         humorState = mentalStateName.ToLower();
-        Debug.Log(humorState);
+        // Debug.Log(humorState);
     }
 
     /// <summary>
@@ -259,7 +259,7 @@ public class NPC : MonoBehaviour
     /// <param name="playerState">Player current action state.</param>
     public void DispatchPlayerState(string playerState)
     {
-        Debug.Log(playerState);
+        // Debug.Log(playerState);
         if (playerState != "")
         {
             if(playerState == "is_talking")
