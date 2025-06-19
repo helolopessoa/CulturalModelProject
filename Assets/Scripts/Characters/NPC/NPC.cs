@@ -5,15 +5,17 @@ using TMPro;
 
 public class NPC : MonoBehaviour
 {
-
-
-
     public GameObject NPCHUD;
     public GameObject LLMChatHUD;
 
-    Emotion emotion;
-    Culture culture;
-    Personality personality;
+    [HideInInspector]
+    public Emotion emotion;
+
+    [HideInInspector]
+    public Culture culture;
+
+    [HideInInspector]
+    public Personality personality;
     Rigidbody npcBody;
     Vector3 direction;
     float prejudiceLevel;

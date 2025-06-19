@@ -38,10 +38,11 @@ def post():
 def generate():
     data = request.get_json()
     prompt = data.get("prompt", "")
-    max_tokens = data.get("max_tokens", 100)
+    max_tokens = data.get("max_tokens", 30)
     
     output = llm(prompt, max_tokens=max_tokens)
-    return jsonify(output)        
+    return jsonify(output)
+    
 
 # api.add_resource(FuzzyAPI, "/fuzzyemotionapi")
 # /<float:axeAF>/<float:axeDT>/<float:axeSJ>/<float:axeAS>

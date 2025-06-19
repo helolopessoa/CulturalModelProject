@@ -13,9 +13,10 @@ public class LLMChatBox : MonoBehaviour
     public Transform chatContent;
     [HideInInspector]
     string response;
+    
     [HideInInspector]
     NPC currentNPC;
-
+    LlamaResponse lr;
     void Start()
     {
         messageInput.onEndEdit.AddListener(onSendMessage);
@@ -50,33 +51,30 @@ public class LLMChatBox : MonoBehaviour
 
     public void onSendMessage(string message)
     {
+        messageInput.gameObject.SetActive(false); 
         // Debug.Log(messageInput.isFocused);
         // if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
         // {
-            // string message = messageInput.text;
-            Debug.Log("onSendMessage");
-            Debug.Log(message);
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                PostLlamaAction(message);
-                messageInput.text = "";
-            }
+        // string message = messageInput.text;
+        response = "Thinking...";
+        Debug.Log("onSendMessage");
+        if (!string.IsNullOrWhiteSpace(message))
+        {
+            lr = PostLlamaAction(message, currentNPC?.humorState, currentNPC?.nameString);
+            // messageInput.text = "";
+        }
+        Debug.Log(lr.choices[0].text);
+        response = lr.choices[0].text;
             // this.currentNPC?.DispatchPlayerState(action.Value);
-            GetLlamaResponse();
-            EventSystem.current.SetSelectedGameObject(messageInput.gameObject);
-            messageInput.ActivateInputField();
+        EventSystem.current.SetSelectedGameObject(messageInput.gameObject);
+        messageInput.ActivateInputField();
         // }
 
     }    
 
-    public void GetLlamaResponse()
-    {
-        LlamaResponse lr = LlamaAPI.getLlamaResponse();
-        response = lr.answer;
-    }
 
-    public void PostLlamaAction(string message)
+    public LlamaResponse PostLlamaAction(string message, string humorState, string name)
     {
-        LlamaAPI.postLlamaAction(message);
+        return LlamaAPI.postLlamaAction(message, humorState, name);
     }
 }
